@@ -1,8 +1,8 @@
 using Xunit;
 
-namespace Demo.Tests
+namespace Demo.Testes
 {
-    public class AssertNullBoolTests
+    public class AssertNullBoolTestes
     {
         [Fact]
         public void Funcionario_Nome_NaoDeveSerNuloOuVazio()

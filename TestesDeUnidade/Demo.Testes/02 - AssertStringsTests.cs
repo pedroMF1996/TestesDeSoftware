@@ -1,8 +1,8 @@
 using Xunit;
 
-namespace Demo.Tests
+namespace Demo.Testes
 {
-    public class AssertStringsTests
+    public class AssertStringsTestes
     {
         [Fact]
         public void StringsTools_UnirNomes_RetornarNomeCompleto()

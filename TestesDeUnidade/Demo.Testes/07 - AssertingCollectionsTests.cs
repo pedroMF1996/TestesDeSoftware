@@ -1,8 +1,8 @@
 using Xunit;
 
-namespace Demo.Tests
+namespace Demo.Testes
 {
-    public class AssertingCollectionsTests
+    public class AssertingCollectionsTestes
     {
         [Fact]
         public void Funcionario_Habilidades_NaoDevePossuirHabilidadesVazias()

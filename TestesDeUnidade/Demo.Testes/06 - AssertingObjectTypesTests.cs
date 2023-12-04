@@ -1,8 +1,8 @@
 using Xunit;
 
-namespace Demo.Tests
+namespace Demo.Testes
 {
-    public class AssertingObjectTypesTests
+    public class AssertingObjectTypesTestes
     {
         [Fact]
         public void FuncionarioFactory_Criar_DeveRetornarTipoFuncionario()

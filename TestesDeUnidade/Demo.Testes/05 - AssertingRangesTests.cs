@@ -1,9 +1,9 @@
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Demo.Tests
+namespace Demo.Testes
 {
-    public class AssertingRangesTests
+    public class AssertingRangesTestes
     {
         [Theory]
         [InlineData(700)]

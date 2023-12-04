@@ -1,9 +1,9 @@
 using System;
 using Xunit;
 
-namespace Demo.Tests
+namespace Demo.Testes
 {
-    public class AssertingExceptionsTests
+    public class AssertingExceptionsTestes
     {
         [Fact]
         public void Calculadora_Dividir_DeveRetornarErroDivisaoPorZero()

@@ -1,8 +1,8 @@
 using Xunit;
 
-namespace Demo.Tests
+namespace Demo.Testes
 {
-    public class AssertNumbersTests
+    public class AssertNumbersTestes
     {
         [Fact]
         public void Calculadora_Somar_DeveSerIgual()
