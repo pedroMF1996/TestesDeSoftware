@@ -45,14 +45,46 @@ namespace Features.Testes
         [Trait("Categoria","Cliente Service Mock Testes")]
         public void ClienteService_Adicionar_DeveExecutarInvalido()
         {
+            //Arange
+            var cliente = _clienteBogusFixture.GerarClienteInvalido();
 
+            var clienteRepo = new Mock<IClienteRepository>();
+            var mediatr = new Mock<IMediator>();
+
+            var clienteService = new ClienteService(clienteRepo.Object, mediatr.Object);
+
+
+            //Act
+            clienteService.Adicionar(cliente);
+
+
+            //Assert
+            Assert.False(cliente.EhValido());
+            clienteRepo.Verify(r => r.Adicionar(cliente), Times.Never);
+            mediatr.Verify(m => m.Publish(It.IsAny<INotification>(), CancellationToken.None), Times.Never);
         }
         
-        [Fact(DisplayName ="Obter Cliente com Sucesso")]
+        [Fact(DisplayName ="Obter Clientes Ativos com Sucesso")]
         [Trait("Categoria","Cliente Service Mock Testes")]
-        public void ClienteService_Obter_DeveExecutarComSucesso()
+        public void ClienteService_ObterTodosAtivos_DeveRetornarApenasClientesAtivos()
         {
+            //Arange
+            var clienteRepo = new Mock<IClienteRepository>();
+            var mediatr = new Mock<IMediator>();
 
+            clienteRepo.Setup(r => r.ObterTodos())
+                .Returns(_clienteBogusFixture.GerarClientesVariados());
+
+
+            var clienteService = new ClienteService(clienteRepo.Object, mediatr.Object);
+
+            //Act
+            var clientes = clienteService.ObterTodosAtivos().ToList();
+
+            //Assert
+            clienteRepo.Verify(r => r.ObterTodos(), Times.Once);
+            Assert.True(clientes.Any());
+            Assert.All(clientes, c => Assert.True(c.Ativo));
         }
 
     }
