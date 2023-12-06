@@ -1,9 +1,13 @@
-﻿using System.Collections.ObjectModel;
+﻿using Nerdstore.Core.DomainObjects;
+using System.Collections.ObjectModel;
 
 namespace Nerdstore.Vendas.Domain.Entidades
 {
     public class Pedido
     {
+        public static int MAX_UNIDADES_ITEM = 15;
+        public static int MIN_UNIDADES_ITEM = 1;
+
         public Guid Id { get; private set; }
         public decimal ValorTotal { get; private set; }
         public StatusPedido StatusPedido { get; private set; }
@@ -18,21 +22,15 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         public void AdicionarItem(PedidoItem pedidoItem)
         {
+            TratarNumeroMaximoItemPedido(pedidoItem);
+
             pedidoItem = TratarPedidoItemExistente(pedidoItem);
+
+            TratarNumeroMaximoItemPedido(pedidoItem);
 
             _pedidoItems.Add(pedidoItem);
 
             CalcularValorPedido();
-        }
-
-        public void CalcularValorPedido()
-        {
-            ValorTotal = PedidoItems.Sum(i => i.CalcularValor());
-        }
-
-        public void TornarRascunho()
-        {
-            StatusPedido = StatusPedido.Rascunho;
         }
 
         private PedidoItem TratarPedidoItemExistente(PedidoItem pedidoItem)
@@ -42,10 +40,26 @@ namespace Nerdstore.Vendas.Domain.Entidades
             {
                 _pedidoItems.Remove(pedidoItemExistente);
                 pedidoItemExistente.AdicionaQuantidade(pedidoItem.Quantidade);
-                return pedidoItemExistente;
+                pedidoItem = pedidoItemExistente;
             }
             return pedidoItem;
         }
+
+        private void TratarNumeroMaximoItemPedido(PedidoItem pedidoItem)
+        {
+            if (pedidoItem.Quantidade > MAX_UNIDADES_ITEM) throw new DomainException($"Maximo de {MAX_UNIDADES_ITEM} unidades por produto");
+        }
+
+        private void CalcularValorPedido()
+        {
+            ValorTotal = PedidoItems.Sum(i => i.CalcularValor());
+        }
+
+        private void TornarRascunho()
+        {
+            StatusPedido = StatusPedido.Rascunho;
+        }
+
         public static class PedidoFactory
         {
             public static Pedido NovoPedidoRascunho()
