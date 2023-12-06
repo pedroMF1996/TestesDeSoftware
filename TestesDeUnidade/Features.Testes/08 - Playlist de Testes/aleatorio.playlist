@@ -1,0 +1,82 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Rule Match="All">
+          <Property Name="Project" Value="Features.Testes" />
+          <Rule Match="Any">
+            <Rule Match="All">
+              <Property Name="Namespace" Value="Features.Testes" />
+              <Rule Match="Any">
+                <Rule Match="All">
+                  <Property Name="Class" Value="ClienteServiceTestes" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteServiceTestes.ClienteService_Adicionar_DeveExecutarComSucesso" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Adicionar Cliente com Sucesso" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteServiceTestes.ClienteService_Adicionar_DeveExecutarInvalido" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Adicionar Cliente com Falha" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteServiceTestes.ClienteService_ObterTodosAtivos_DeveRetornarApenasClientesAtivos" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Obter Clientes Ativos com Sucesso" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="ClienteServicesAutoMockFixtureTestes" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteServicesAutoMockFixtureTestes.ClienteService_Adicionar_DeveExecutarComSucesso" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Adicionar Cliente com Sucesso" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteServicesAutoMockFixtureTestes.ClienteService_Adicionar_DeveExecutarInvalido" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Adicionar Cliente com Falha" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteServicesAutoMockFixtureTestes.ClienteService_ObterTodosAtivos_DeveRetornarApenasClientesAtivos" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Obter Clientes Ativos com Sucesso" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+                <Rule Match="All">
+                  <Property Name="Class" Value="ClienteFluentAssertionTestes" />
+                  <Rule Match="Any">
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteFluentAssertionTestes.Cliente_NovoCliente_DeveEstarInValido" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Novo Cliente Invalido" />
+                      </Rule>
+                    </Rule>
+                    <Rule Match="All">
+                      <Property Name="TestWithNormalizedFullyQualifiedName" Value="Features.Testes.ClienteFluentAssertionTestes.Cliente_NovoCliente_DeveEstarValido" />
+                      <Rule Match="Any">
+                        <Property Name="DisplayName" Value="Novo Cliente Valido" />
+                      </Rule>
+                    </Rule>
+                  </Rule>
+                </Rule>
+              </Rule>
+            </Rule>
+          </Rule>
+        </Rule>
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>
