@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Features\Features.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="08 - Playlist de Testes\" />
+  </ItemGroup>
+
 </Project>
