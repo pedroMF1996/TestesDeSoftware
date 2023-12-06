@@ -38,7 +38,7 @@ namespace Features.Testes
 
         }
         
-        [Fact(DisplayName ="Novo Cliente Invalido")]
+        [Fact(DisplayName = "Novo Cliente Invalido")]
         [Trait("Categoria", "Cliente MensagemDeSaida Testes")]
         public void Cliente_NovoCliente_DeveEstarInValido()
         {
