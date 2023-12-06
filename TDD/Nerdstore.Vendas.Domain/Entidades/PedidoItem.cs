@@ -14,5 +14,15 @@
             Quantidade = quantidade;
             ValorUnitario = valor;
         }
+
+        public void AdicionaQuantidade(int quantidade)
+        {
+            Quantidade += quantidade;
+        }
+
+        public decimal CalcularValor()
+        {
+            return Quantidade * ValorUnitario;
+        }
     }
 }
