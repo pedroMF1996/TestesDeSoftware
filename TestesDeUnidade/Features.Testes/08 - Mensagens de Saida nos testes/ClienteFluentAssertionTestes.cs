@@ -1,27 +1,23 @@
 ﻿using Features.Clientes;
 using FluentAssertions;
-using Xunit.Abstractions;
 
 namespace Features.Testes
 {
     [Collection(nameof(ClienteBogusCollection))]
-    public class ClienteMensagemDeSaidaTestes : IClassFixture<ClienteTesteAutoMockerFixture>
+    public class ClienteFluentAssertionTestes : IClassFixture<ClienteTesteAutoMockerFixture>
     {
         readonly ClienteTesteAutoMockerFixture _clienteTesteAutoMockerFixture;
-        readonly ITestOutputHelper _testOutputHelper;
-
         private readonly ClienteService _clienteService;
 
-        public ClienteMensagemDeSaidaTestes(ClienteTesteAutoMockerFixture clienteBogusFixture, ITestOutputHelper testOutputHelper)
+        public ClienteFluentAssertionTestes(ClienteTesteAutoMockerFixture clienteBogusFixture)
         {
             //Arrange
             _clienteTesteAutoMockerFixture = clienteBogusFixture;
             _clienteService = _clienteTesteAutoMockerFixture.ObterClienteService();
-            _testOutputHelper = testOutputHelper;
         }
 
         [Fact(DisplayName ="Novo Cliente Valido")]
-        [Trait("Categoria","Cliente MensagemDeSaida Testes")]
+        [Trait("Categoria","Cliente FluentAssertion Testes")]
         public void Cliente_NovoCliente_DeveEstarValido()
         {
             //Arange
@@ -35,11 +31,10 @@ namespace Features.Testes
             //Assert
             result.Should().BeTrue("Deve ser um cliente valido");
             cliente.ValidationResult.Errors.Should().HaveCount(0, "Nao deve possuir erros de validacao");
-
         }
         
         [Fact(DisplayName ="Novo Cliente Invalido")]
-        [Trait("Categoria", "Cliente MensagemDeSaida Testes")]
+        [Trait("Categoria", "Cliente FluentAssertion Testes")]
         public void Cliente_NovoCliente_DeveEstarInValido()
         {
             //Arange
@@ -53,7 +48,6 @@ namespace Features.Testes
             //Assert
             result.Should().BeFalse("Deve ser um cliente invalido");
             cliente.ValidationResult.Errors.Should().HaveCountGreaterThan(0, "Deve possuir erros de validacao");
-            _testOutputHelper.WriteLine($"Foram encontrados {cliente.ValidationResult.Errors.Count} erros nesta validacao");
         }
     }
 }
