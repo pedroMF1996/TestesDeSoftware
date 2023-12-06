@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Nerdstore.Vendas.Domain\Nerdstore.Vendas.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
