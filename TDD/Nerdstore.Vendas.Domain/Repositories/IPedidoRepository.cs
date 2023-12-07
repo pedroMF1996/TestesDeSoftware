@@ -1,13 +1,9 @@
-﻿using Nerdstore.Vendas.Domain.Entidades;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Nerdstore.Core.Data;
+using Nerdstore.Vendas.Domain.Entidades;
 
 namespace Nerdstore.Vendas.Domain.Repositories
 {
-    public interface IPedidoRepository
+    public interface IPedidoRepository : IRepository<Pedido>
     {
         void Adicionar(Pedido pedido);
     }

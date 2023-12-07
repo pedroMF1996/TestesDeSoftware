@@ -30,15 +30,14 @@ namespace Nerdstore.Vendas.Application.Commands
 
             _repository.Adicionar(pedido);
 
-            await _mediatr.Publish(new PedidoItemAdicionadoEvent(pedido.ClienteId, 
-                                                                 pedido.Id, 
-                                                                 pedidoItem.Id, 
-                                                                 pedidoItem.Nome, 
-                                                                 pedidoItem.ValorUnitario, 
-                                                                 pedidoItem.Quantidade), cancellationToken);
+            pedido.AddNotification(new PedidoItemAdicionadoEvent(pedido.ClienteId,
+                                                                 pedido.Id,
+                                                                 pedidoItem.Id,
+                                                                 pedidoItem.Nome,
+                                                                 pedidoItem.ValorUnitario,
+                                                                 pedidoItem.Quantidade));
 
-
-            return ValidationResult;
+            return await Commit(_repository);
         }
     }
 }
