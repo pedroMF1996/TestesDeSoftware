@@ -4,12 +4,12 @@ using System.Collections.ObjectModel;
 
 namespace Nerdstore.Vendas.Domain.Entidades
 {
-    public class Pedido
+    public class Pedido : Entity
     {
         public static int MAX_UNIDADES_ITEM = 15;
         public static int MIN_UNIDADES_ITEM = 1;
 
-        public Guid Id { get; private set; }
+        public Guid ClienteId { get; private set; }
         public decimal ValorTotal { get; private set; }
         public decimal Desconto { get; private set; }
         public StatusPedido StatusPedido { get; private set; }
@@ -18,9 +18,9 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public IReadOnlyCollection<PedidoItem> PedidoItems => _pedidoItems;
         private Collection<PedidoItem> _pedidoItems = new Collection<PedidoItem>();
 
-        protected Pedido()
+        protected Pedido(Guid clienteId)
         {
-            Id = Guid.NewGuid();
+            ClienteId = clienteId;
             TornarRascunho();
         }
 
@@ -143,9 +143,9 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         public static class PedidoFactory
         {
-            public static Pedido NovoPedidoRascunho()
+            public static Pedido NovoPedidoRascunho(Guid clienteId)
             {
-                return new Pedido();
+                return new Pedido(clienteId);
             }
         }
     }

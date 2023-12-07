@@ -11,8 +11,4 @@
     <ProjectReference Include="..\Nerdstore.Vendas.Domain\Nerdstore.Vendas.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
-
 </Project>

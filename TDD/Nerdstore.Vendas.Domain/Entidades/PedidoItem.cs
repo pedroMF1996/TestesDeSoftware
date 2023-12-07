@@ -2,7 +2,7 @@
 
 namespace Nerdstore.Vendas.Domain.Entidades
 {
-    public class PedidoItem
+    public class PedidoItem 
     {
         public Guid Id { get; private set; }
         public string Nome { get; private set; }
