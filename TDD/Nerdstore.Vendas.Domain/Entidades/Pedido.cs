@@ -1,4 +1,5 @@
-﻿using Nerdstore.Core.DomainObjects;
+﻿using FluentValidation.Results;
+using Nerdstore.Core.DomainObjects;
 using System.Collections.ObjectModel;
 
 namespace Nerdstore.Vendas.Domain.Entidades
@@ -10,7 +11,10 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         public Guid Id { get; private set; }
         public decimal ValorTotal { get; private set; }
+        public decimal Desconto { get; private set; }
         public StatusPedido StatusPedido { get; private set; }
+        public Voucher Voucher { get; private set; }
+        public bool VoucherUtilizado { get; private set; }
         public IReadOnlyCollection<PedidoItem> PedidoItems => _pedidoItems;
         private Collection<PedidoItem> _pedidoItems = new Collection<PedidoItem>();
 
@@ -86,6 +90,33 @@ namespace Nerdstore.Vendas.Domain.Entidades
             if (!_pedidoItems.Any(i => i.Id == pedidoItem.Id)) throw new DomainException("Produto inexistente");
         }
 
+        public ValidationResult AplicarVoucher(Voucher voucher)
+        {
+            var result = voucher.ValidarSeAplicavel();
+            if (!result.IsValid) return result;
+
+            Voucher = voucher;
+            VoucherUtilizado = true;
+
+            CalcularValorTotalDesconto();
+
+            return result;
+        }
+
+        public void CalcularValorTotalDesconto()
+        {
+            if (!VoucherUtilizado) return;
+            
+            var valorTotalOrigem = ValorTotal;
+
+            if(Voucher.TipoDesconto == TipoDesconto.Valor && Voucher.ValorDesconto.HasValue)
+                ValorTotal -= Voucher.ValorDesconto.Value;
+            else if(Voucher.PercentualDesconto.HasValue)
+                ValorTotal *= (1 - Voucher.PercentualDesconto.Value / 100);
+
+            Desconto = valorTotalOrigem - ValorTotal;
+        }
+
         public static class PedidoFactory
         {
             public static Pedido NovoPedidoRascunho()
@@ -102,15 +133,5 @@ namespace Nerdstore.Vendas.Domain.Entidades
         Pago,
         Entregue,
         Cancelado
-    }
-
-    public class Cliente
-    {
-        public Guid Id { get; private set; }
-
-        public Cliente()
-        {
-            Id = Guid.NewGuid();
-        }
     }
 }

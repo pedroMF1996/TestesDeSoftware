@@ -196,5 +196,76 @@ namespace Nerdstore.Vendas.Domain.Testes
             // Assert
             Assert.Equal(2500, pedido.ValorTotal);
         }
+
+        [Fact(DisplayName = "Aplicar Voucher Valido No Pedido Sem Erros")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void Pedido_AplicarVoucherValido_DeveRetornarSemEerros()
+        {
+            // Arrange
+            var pedido = PedidoFactory.NovoPedidoRascunho();
+            var voucher = new Voucher("PROMO-15-REAIS", 15, 0, TipoDesconto.Valor, 1, DateTime.Now.AddDays(1), true, false);
+
+            // Act
+            var result = pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.True(result.IsValid);
+        }
+
+        [Fact(DisplayName = "Aplicar Voucher Valido No Pedido Sem Erros")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_VoucherTipoValorDesconto_DeveDescontarDoValorTotal()
+        {
+            // Arrange
+            var pedido = PedidoFactory.NovoPedidoRascunho();
+
+            var pedidoItemRemover = new PedidoItem(Guid.NewGuid(), "Produto Teste", 1, 2000);
+            pedido.AdicionarItem(pedidoItemRemover);
+
+            var pedidoItem = new PedidoItem(Guid.NewGuid(), "Produto Teste", 1, 1000);
+            pedido.AdicionarItem(pedidoItem);
+            
+            var pedidoItem2 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 3, 500);
+            pedido.AdicionarItem(pedidoItem2);
+
+            var voucher = new Voucher("PROMO-15-REAIS", 15, 0, TipoDesconto.Valor, 1, DateTime.Now.AddDays(1), true, false);
+
+            var valorComDesconto = pedido.ValorTotal - voucher.ValorDesconto;
+
+            // Act
+            var result = pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(valorComDesconto, pedido.ValorTotal);
+        }
+
+        [Fact(DisplayName = "Aplicar Voucher Valido No Pedido Sem Erros")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_VoucherTipoPercentualDesconto_DeveDescontarDoValorTotal()
+        {
+            // Arrange
+            var pedido = PedidoFactory.NovoPedidoRascunho();
+
+            var pedidoItemRemover = new PedidoItem(Guid.NewGuid(), "Produto Teste", 1, 2000);
+            pedido.AdicionarItem(pedidoItemRemover);
+
+            var pedidoItem = new PedidoItem(Guid.NewGuid(), "Produto Teste", 1, 1000);
+            pedido.AdicionarItem(pedidoItem);
+            
+            var pedidoItem2 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 3, 500);
+            pedido.AdicionarItem(pedidoItem2);
+
+            var voucher = new Voucher("PROMO-15%", 0, 15, TipoDesconto.Porcentagem, 1, DateTime.Now.AddDays(1), true, false);
+
+            var valorComDesconto = pedido.ValorTotal * ( 1 - voucher.PercentualDesconto/100 );
+
+            // Act
+            var result = pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(valorComDesconto, pedido.ValorTotal);
+        }
     }
 }
