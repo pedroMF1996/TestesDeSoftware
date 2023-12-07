@@ -24,7 +24,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
         {
             TratarNumeroMaximoItemPedido(pedidoItem);
 
-            pedidoItem = TratarPedidoItemExistente(pedidoItem);
+            AtualizarQuantidadePedidoItemExistente(ref pedidoItem, pedidoItem.Id);
 
             TratarNumeroMaximoItemPedido(pedidoItem);
 
@@ -33,16 +33,37 @@ namespace Nerdstore.Vendas.Domain.Entidades
             CalcularValorPedido();
         }
 
-        private PedidoItem TratarPedidoItemExistente(PedidoItem pedidoItem)
+        public void AtualizarItem(PedidoItem pedidoItem)
         {
+            TratarPedidoItemInexistente(pedidoItem);
+            TratarNumeroMaximoItemPedido(pedidoItem);
+
             var pedidoItemExistente = _pedidoItems.FirstOrDefault(i => i.Id == pedidoItem.Id);
+
+            _pedidoItems.Remove(pedidoItemExistente);
+            _pedidoItems.Add(pedidoItem);
+
+            CalcularValorPedido();
+        }
+
+        public void RemoverItem(PedidoItem pedidoItem)
+        {
+            TratarPedidoItemInexistente(pedidoItem);
+
+            _pedidoItems.Remove(pedidoItem);
+
+            CalcularValorPedido();
+        }
+
+        private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem, Guid pedidoId)
+        {
+            var pedidoItemExistente = _pedidoItems.FirstOrDefault(i => i.Id == pedidoId);
             if (pedidoItemExistente is not null)
             {
                 _pedidoItems.Remove(pedidoItemExistente);
                 pedidoItemExistente.AdicionaQuantidade(pedidoItem.Quantidade);
                 pedidoItem = pedidoItemExistente;
             }
-            return pedidoItem;
         }
 
         private void TratarNumeroMaximoItemPedido(PedidoItem pedidoItem)
@@ -58,6 +79,11 @@ namespace Nerdstore.Vendas.Domain.Entidades
         private void TornarRascunho()
         {
             StatusPedido = StatusPedido.Rascunho;
+        }
+
+        private void TratarPedidoItemInexistente(PedidoItem pedidoItem)
+        {
+            if (!_pedidoItems.Any(i => i.Id == pedidoItem.Id)) throw new DomainException("Produto inexistente");
         }
 
         public static class PedidoFactory
