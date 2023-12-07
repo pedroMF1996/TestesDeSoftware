@@ -78,6 +78,8 @@ namespace Nerdstore.Vendas.Domain.Entidades
         private void CalcularValorPedido()
         {
             ValorTotal = PedidoItems.Sum(i => i.CalcularValor());
+
+            CalcularValorTotalDesconto();
         }
 
         private void TornarRascunho()
@@ -106,6 +108,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public void CalcularValorTotalDesconto()
         {
             if (!VoucherUtilizado) return;
+            if (TratarDescontoMaiorQueValorTotal()) return;
             
             var valorTotalOrigem = ValorTotal;
 
@@ -115,6 +118,27 @@ namespace Nerdstore.Vendas.Domain.Entidades
                 ValorTotal *= (1 - Voucher.PercentualDesconto.Value / 100);
 
             Desconto = valorTotalOrigem - ValorTotal;
+        }
+
+        private bool TratarDescontoMaiorQueValorTotal()
+        {
+            if (VerificaValorDescontoMaiorQueValorTotal() 
+                || VerificaValorPorcentagemMaiorQueValorTotal())
+            {
+                ValorTotal = 0;
+                return true;
+            }
+            return false;
+        }
+
+        private bool VerificaValorPorcentagemMaiorQueValorTotal()
+        {
+            return Voucher.PercentualDesconto.HasValue && Voucher.PercentualDesconto.Value > 100;
+        }
+
+        private bool VerificaValorDescontoMaiorQueValorTotal()
+        {
+            return Voucher.ValorDesconto.HasValue && Voucher.ValorDesconto.Value > ValorTotal;
         }
 
         public static class PedidoFactory

@@ -212,7 +212,7 @@ namespace Nerdstore.Vendas.Domain.Testes
             Assert.True(result.IsValid);
         }
 
-        [Fact(DisplayName = "Aplicar Voucher Valido No Pedido Sem Erros")]
+        [Fact(DisplayName = "Voucher Tipo Valor Desconto Deve Descontar Do Valor Total")]
         [Trait("Categoria", "Vendas - Pedido")]
         public void AplicarVoucher_VoucherTipoValorDesconto_DeveDescontarDoValorTotal()
         {
@@ -240,7 +240,7 @@ namespace Nerdstore.Vendas.Domain.Testes
             Assert.Equal(valorComDesconto, pedido.ValorTotal);
         }
 
-        [Fact(DisplayName = "Aplicar Voucher Valido No Pedido Sem Erros")]
+        [Fact(DisplayName = "Voucher Tipo Percentual Desconto Deve Descontar Do Valor Total")]
         [Trait("Categoria", "Vendas - Pedido")]
         public void AplicarVoucher_VoucherTipoPercentualDesconto_DeveDescontarDoValorTotal()
         {
@@ -256,7 +256,7 @@ namespace Nerdstore.Vendas.Domain.Testes
             var pedidoItem2 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 3, 500);
             pedido.AdicionarItem(pedidoItem2);
 
-            var voucher = new Voucher("PROMO-15%", 0, 15, TipoDesconto.Porcentagem, 1, DateTime.Now.AddDays(1), true, false);
+            var voucher = new Voucher("PROMO-15-OFF", 0, 15, TipoDesconto.Porcentagem, 1, DateTime.Now.AddDays(1), true, false);
 
             var valorComDesconto = pedido.ValorTotal * ( 1 - voucher.PercentualDesconto/100 );
 
@@ -264,6 +264,60 @@ namespace Nerdstore.Vendas.Domain.Testes
             var result = pedido.AplicarVoucher(voucher);
 
             // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(valorComDesconto, pedido.ValorTotal);
+        }
+        
+        [Fact(DisplayName = "Desconto Excede Valor Total Pedido Deve Zerar Valor Total")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_DescontoExcedeValorTotalPedido_DeveZerarValorTotal()
+        {
+            // Arrange
+            var pedido = PedidoFactory.NovoPedidoRascunho();
+
+            var pedidoItemRemover = new PedidoItem(Guid.NewGuid(), "Produto Teste", 1, 2000);
+            pedido.AdicionarItem(pedidoItemRemover);
+
+            var pedidoItem = new PedidoItem(Guid.NewGuid(), "Produto Teste", 1, 1000);
+            pedido.AdicionarItem(pedidoItem);
+            
+            var pedidoItem2 = new PedidoItem(Guid.NewGuid(), "Produto Xpto", 3, 500);
+            pedido.AdicionarItem(pedidoItem2);
+
+            var voucher = new Voucher("PROMO-5000-REAIS", 5000, 0, TipoDesconto.Valor, 1, DateTime.Now.AddDays(1), true, false);
+
+            // Act
+            var result = pedido.AplicarVoucher(voucher);
+
+            // Assert
+            Assert.True(result.IsValid);
+            Assert.Equal(0, pedido.ValorTotal);
+        }
+        
+        [Fact(DisplayName = "Ao Modificar Itens Pedido Voucher Aplicado Deve Descontar Do Valor Total")]
+        [Trait("Categoria", "Vendas - Pedido")]
+        public void AplicarVoucher_ModificarItensPedido_DeveDescontarDoValorTotal()
+        {
+            // Arrange
+            var pedido = PedidoFactory.NovoPedidoRascunho();
+
+            var pedidoItemRemover = new PedidoItem(Guid.NewGuid(), "Produto Teste", 1, 2000);
+            pedido.AdicionarItem(pedidoItemRemover);
+            var pedidoItemId = Guid.NewGuid();
+            var pedidoItem = new PedidoItem(pedidoItemId, "Produto Teste", 1, 1000);
+            pedido.AdicionarItem(pedidoItem);
+            
+            var pedidoItem2 = new PedidoItem(pedidoItemId, "Produto Teste", 3, 1000);
+
+            var voucher = new Voucher("PROMO-50-REAIS", 50, 0, TipoDesconto.Valor, 1, DateTime.Now.AddDays(1), true, false);
+            var result = pedido.AplicarVoucher(voucher);
+
+            
+            // Act
+            pedido.AdicionarItem(pedidoItem2);
+
+            // Assert
+            var valorComDesconto = pedido.PedidoItems.Sum(i => i.CalcularValor()) - voucher.ValorDesconto;
             Assert.True(result.IsValid);
             Assert.Equal(valorComDesconto, pedido.ValorTotal);
         }
