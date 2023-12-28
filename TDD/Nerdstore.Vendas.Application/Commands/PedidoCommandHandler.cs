@@ -10,27 +10,25 @@ namespace Nerdstore.Vendas.Application.Commands
     public class PedidoCommandHandler : CommandHandler, 
                                         IRequestHandler<AdicionarItemPedidoCommand,ValidationResult>
     {
-        private readonly IMediator _mediatr;
         private readonly IPedidoRepository _repository;
 
-        public PedidoCommandHandler(IMediator mediatr, IPedidoRepository repository)
+        public PedidoCommandHandler(IPedidoRepository repository, IMediator mediator) : base(mediator)
         {
-            _mediatr = mediatr;
             _repository = repository;
         }
 
         public async Task<ValidationResult> Handle(AdicionarItemPedidoCommand message, CancellationToken cancellationToken)
         {
-            if (!message.EhValido()) return message.ValidationResult;
+            if (!message.EhValido()) 
+                return await LancarErrosDeValidacao(message, cancellationToken);
             
+            var pedido = await _repository.ObterPedidoRascunhoPorClienteId(message.ClienteId);
             var pedidoItem = new PedidoItem(message.PedidoItemId, message.NomePedidoItem, message.QuantidadePedidoItem, message.ValorUnitarioPedidoItem);
-            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(message.ClienteId);
-            
-            pedido.AdicionarItem(pedidoItem);
 
-            _repository.Adicionar(pedido);
+            pedido = pedido is null ? NovoPedido(message, pedidoItem) : 
+                                      PedidoExistente(pedido, pedidoItem);
 
-            pedido.AddNotification(new PedidoItemAdicionadoEvent(pedido.ClienteId,
+            pedido.AdicionarEvento(new PedidoItemAdicionadoEvent(pedido.ClienteId,
                                                                  pedido.Id,
                                                                  pedidoItem.Id,
                                                                  pedidoItem.Nome,
@@ -38,6 +36,33 @@ namespace Nerdstore.Vendas.Application.Commands
                                                                  pedidoItem.Quantidade));
 
             return await Commit(_repository);
+        }
+
+        private Pedido NovoPedido(AdicionarItemPedidoCommand message, PedidoItem pedidoItem)
+        {
+            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(message.ClienteId);
+            
+            pedido.AdicionarItem(pedidoItem);
+            
+            _repository.Adicionar(pedido);
+            
+            return pedido;
+        }
+
+        private Pedido PedidoExistente(Pedido pedido, PedidoItem pedidoItem)
+        {
+            var pedidoItemExistente = pedido.ExistePedidoItem(pedidoItem.Id);
+            
+            pedido.AdicionarItem(pedidoItem);
+            
+            if (pedidoItemExistente)
+                _repository.AtualizarItem(pedidoItem);
+            else
+                _repository.AdicionarItem(pedidoItem);
+
+            _repository.Atualizar(pedido);
+            
+            return pedido;
         }
     }
 }

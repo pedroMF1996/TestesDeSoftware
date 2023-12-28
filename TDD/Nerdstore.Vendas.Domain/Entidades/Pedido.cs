@@ -59,15 +59,21 @@ namespace Nerdstore.Vendas.Domain.Entidades
             CalcularValorPedido();
         }
 
-        private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem, Guid pedidoId)
+        public bool ExistePedidoItem(Guid pedidoItemId)
         {
-            var pedidoItemExistente = _pedidoItems.FirstOrDefault(i => i.Id == pedidoId);
-            if (pedidoItemExistente is not null)
-            {
-                _pedidoItems.Remove(pedidoItemExistente);
-                pedidoItemExistente.AdicionaQuantidade(pedidoItem.Quantidade);
-                pedidoItem = pedidoItemExistente;
-            }
+            return PedidoItems.Any(i => i.Id == pedidoItemId);
+        }
+
+        private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem, Guid pedidoItemId)
+        {
+            var pedidoItemExistente = _pedidoItems.FirstOrDefault(i => i.Id == pedidoItemId);
+            
+            if (pedidoItemExistente is null)
+                return;
+
+            _pedidoItems.Remove(pedidoItemExistente);
+            pedidoItemExistente.AdicionaQuantidade(pedidoItem.Quantidade);
+            pedidoItem = pedidoItemExistente;
         }
 
         private void TratarNumeroMaximoItemPedido(PedidoItem pedidoItem)

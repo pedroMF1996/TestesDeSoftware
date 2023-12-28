@@ -13,12 +13,17 @@ namespace Nerdstore.Core.DomainObjects
             Id = Guid.NewGuid();
         }
 
-        public void AddNotification(Event notification){
+        public void AdicionarEvento(Event notification){
             _notifications ??= new List<Event>();
             _notifications.Add(notification);
         }
 
-        public void ClearNotifications()
+        public void RemoverEvento(Event notification) 
+        {
+            _notifications.Remove(notification);
+        }
+
+        public void LimparEventos()
         {
             _notifications.Clear();
         }

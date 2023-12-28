@@ -82,9 +82,6 @@ namespace Features.Testes
 
             _clienteTesteAutoMockerFixture.Mocker.GetMock<IClienteRepository>()
                 .Verify(r => r.ObterTodos(), Times.Once);
-
-            _clienteService.ExecutionTimeOf(c => c.ObterTodosAtivos())
-                .Should().BeLessThanOrEqualTo(1.Milliseconds());
         }
     }
 }

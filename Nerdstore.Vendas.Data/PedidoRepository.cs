@@ -1,8 +1,4 @@
-﻿
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Nerdstore.Core.Data;
-using Nerdstore.Core.DomainObjects;
+﻿using Nerdstore.Core.Data;
 using Nerdstore.Vendas.Domain.Entidades;
 using Nerdstore.Vendas.Domain.Repositories;
 
@@ -24,54 +20,29 @@ namespace Nerdstore.Vendas.Data
             throw new NotImplementedException();
         }
 
-        public void Dispose()
+        public void AdicionarItem(PedidoItem pedidoItem)
         {
             throw new NotImplementedException();
         }
-    }
 
-    public class VendasContext : DbContext, IUnitOfWork
-    {
-        private readonly IMediator _mediator;
-
-        public VendasContext(IMediator mediator, DbContextOptions opt) : base(opt) 
+        public void Atualizar(Pedido pedido)
         {
-            _mediator = mediator;
+            throw new NotImplementedException();
         }
 
-        public async Task<bool> Commit()
+        public void AtualizarItem(PedidoItem pedidoItem)
         {
-            var sucesso = await base.SaveChangesAsync() > 0;
-
-            if (sucesso)
-                await _mediator.PublicarEventos(this);
-
-            return sucesso;
+            throw new NotImplementedException();
         }
-    }
 
-    public static class MediatrExtensions
-    {
-        public static async Task PublicarEventos<T>(this IMediator mediator, T ctx) where T : DbContext
+        public void Dispose()
         {
-            var domainEntities = ctx.ChangeTracker
-                .Entries<Entity>()
-                .Where(x => x.Entity.Notifications != null && x.Entity.Notifications.Any());
+            _vendasContext?.Dispose();
+        }
 
-            var domainEvents = domainEntities
-                .SelectMany(x => x.Entity.Notifications)
-                .ToList();
-
-            domainEntities.ToList()
-                .ForEach(entity => entity.Entity.ClearNotifications());
-
-            var tasks = domainEvents
-                .Select(async (domainEvent) =>
-                {
-                    await mediator.Publish(domainEvent);
-                });
-
-            await Task.WhenAll(tasks);
+        public Task<Pedido> ObterPedidoRascunhoPorClienteId(Guid clienteId)
+        {
+            throw new NotImplementedException();
         }
     }
 }
