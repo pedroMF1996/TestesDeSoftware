@@ -1,21 +1,20 @@
-﻿using MediatR;
-using Moq;
-using Moq.AutoMock;
-using Nerdstore.Vendas.Application.Commands;
-using Nerdstore.Vendas.Domain.Entidades;
-using Nerdstore.Vendas.Domain.Repositories;
-
-namespace Nerdstore.Vendas.Application.Tests.Pedidos
+﻿namespace Nerdstore.Vendas.Application.Tests.Pedidos
 {
     public class PedidoCommandHandlerTestes
     {
         private readonly AutoMocker mocker;
+        private readonly Guid _clienteId;
+        private readonly Guid _produtoId;
+        private readonly Pedido _pedido;
         private readonly PedidoCommandHandler commandHandler;
         private readonly Mock<IPedidoRepository> pedidoRepository;
         public PedidoCommandHandlerTestes()
         {
             // Arrange
             mocker = new AutoMocker();
+            _clienteId = Guid.NewGuid();
+            _produtoId = Guid.NewGuid();
+            _pedido = Pedido.PedidoFactory.NovoPedidoRascunho(_clienteId);
             commandHandler = mocker.CreateInstance<PedidoCommandHandler>();
             pedidoRepository = mocker.GetMock<IPedidoRepository>();
             pedidoRepository.Setup(r => r.UnitOfWork.Commit()).Returns(Task.FromResult(true));
@@ -26,7 +25,7 @@ namespace Nerdstore.Vendas.Application.Tests.Pedidos
         public async Task AdicionarItem_NovoPedido_DeveExecutarComSucesso()
         {
             // Arrange
-            var command = new AdicionarItemPedidoCommand(Guid.NewGuid(),Guid.NewGuid(), "Item Teste", 2, 100);
+            var command = new AdicionarItemPedidoCommand(_clienteId, _produtoId, "Item Teste", 2, 100);
             
             // Act
             var result = await commandHandler.Handle(command, CancellationToken.None);
@@ -42,11 +41,8 @@ namespace Nerdstore.Vendas.Application.Tests.Pedidos
         public async Task AdicionarItem_NovoItemAoPedidoRascunho_DeveExecutarComSucesso()
         {
             // Arrange
-            var command = new AdicionarItemPedidoCommand(Guid.NewGuid(),Guid.NewGuid(), "Item Teste", 2, 100);
-            
-            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(command.ClienteId);
-            
-            pedidoRepository.Setup(r => r.ObterPedidoRascunhoPorClienteId(command.ClienteId)).Returns(Task.FromResult(pedido));
+            var command = new AdicionarItemPedidoCommand(_clienteId, _produtoId, "Item Teste", 2, 100);
+            pedidoRepository.Setup(r => r.ObterPedidoRascunhoPorClienteId(command.ClienteId)).Returns(Task.FromResult(_pedido));
 
             // Act
             var result = await commandHandler.Handle(command, CancellationToken.None);
@@ -64,12 +60,11 @@ namespace Nerdstore.Vendas.Application.Tests.Pedidos
         public async Task AdicionarItem_ItemExistenteAoPedidoRascunho_DeveExecutarComSucesso()
         {
             // Arrange
-            var command = new AdicionarItemPedidoCommand(Guid.NewGuid(),Guid.NewGuid(), "Item Teste", 2, 100);
+            var command = new AdicionarItemPedidoCommand(_clienteId, _produtoId, "Item Teste", 2, 100);
             
-            var pedido = Pedido.PedidoFactory.NovoPedidoRascunho(command.ClienteId);
-            pedido.AdicionarItem(new(command.PedidoItemId, command.NomePedidoItem, command.QuantidadePedidoItem, command.ValorUnitarioPedidoItem));
+            _pedido.AdicionarItem(new(command.PedidoItemId, command.NomePedidoItem, command.QuantidadePedidoItem, command.ValorUnitarioPedidoItem));
             
-            pedidoRepository.Setup(r => r.ObterPedidoRascunhoPorClienteId(command.ClienteId)).Returns(Task.FromResult(pedido));
+            pedidoRepository.Setup(r => r.ObterPedidoRascunhoPorClienteId(command.ClienteId)).Returns(Task.FromResult(_pedido));
 
             // Act
             var result = await commandHandler.Handle(command, CancellationToken.None);

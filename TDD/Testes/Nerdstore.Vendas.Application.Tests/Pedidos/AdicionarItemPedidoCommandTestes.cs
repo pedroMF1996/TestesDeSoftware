@@ -1,7 +1,4 @@
-﻿using Nerdstore.Vendas.Application.Commands;
-using Nerdstore.Vendas.Domain.Entidades;
-
-namespace Nerdstore.Vendas.Application.Tests.Pedidos
+﻿namespace Nerdstore.Vendas.Application.Tests.Pedidos
 {
     public class AdicionarItemPedidoCommandTestes
     {

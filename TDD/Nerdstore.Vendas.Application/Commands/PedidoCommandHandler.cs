@@ -22,9 +22,9 @@ namespace Nerdstore.Vendas.Application.Commands
             if (!message.EhValido()) 
                 return await LancarErrosDeValidacao(message, cancellationToken);
             
-            var pedido = await _repository.ObterPedidoRascunhoPorClienteId(message.ClienteId);
             var pedidoItem = new PedidoItem(message.PedidoItemId, message.NomePedidoItem, message.QuantidadePedidoItem, message.ValorUnitarioPedidoItem);
 
+            var pedido = await _repository.ObterPedidoRascunhoPorClienteId(message.ClienteId);
             pedido = pedido is null ? NovoPedido(message, pedidoItem) : 
                                       PedidoExistente(pedido, pedidoItem);
 
