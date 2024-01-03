@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Nerdstore.Core\Nerdstore.Core.csproj" />
+    <ProjectReference Include="..\Nerdstore.Vendas.Domain\Nerdstore.Vendas.Domain.csproj" />
   </ItemGroup>
 
 </Project>

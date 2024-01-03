@@ -22,4 +22,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Nerdstore.Vendas.Core.Testes\Nerdstore.Vendas.Core.Testes.csproj" />
+    <ProjectReference Include="..\..\Nerdstore.Vendas.Application\Nerdstore.Vendas.Application.csproj" />
+  </ItemGroup>
+
 </Project>

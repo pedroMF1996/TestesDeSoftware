@@ -10,7 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+    <PackageReference Include="Moq" Version="4.20.70" />
+    <PackageReference Include="Moq.AutoMock" Version="3.5.0" />
     <PackageReference Include="xunit" Version="2.4.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,12 +23,6 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Nerdstore.Vendas.Core.Testes\Nerdstore.Vendas.Core.Testes.csproj" />
-    <ProjectReference Include="..\..\Nerdstore.Core\Nerdstore.Core.csproj" />
-    <ProjectReference Include="..\..\Nerdstore.Vendas.Domain\Nerdstore.Vendas.Domain.csproj" />
   </ItemGroup>
 
 </Project>
