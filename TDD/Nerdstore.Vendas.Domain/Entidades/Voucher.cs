@@ -7,6 +7,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
 {
     public class Voucher : Entity
     {
+        protected Voucher() { }
         public Voucher(string codigo, 
                        decimal? valorDesconto, 
                        decimal? percentualDesconto, 
@@ -34,7 +35,9 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public DateTime DataValidade { get; private set; }
         public bool Ativo { get; private set; }
         public bool Utilizado { get; private set; }
-        
+
+        // EF Rel.
+        public ICollection<Pedido> Pedidos { get; set; }
 
         public ValidationResult ValidarSeAplicavel()
         {

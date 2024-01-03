@@ -9,7 +9,10 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public string Nome { get; private set; }
         public int Quantidade { get; private set; }
         public decimal ValorUnitario { get; private set; }
+        // EF Rel.
+        public Pedido Pedido { get; set; }
 
+        protected PedidoItem() { }
         public PedidoItem(Guid id, string nome, int quantidade, decimal valor)
         {
             

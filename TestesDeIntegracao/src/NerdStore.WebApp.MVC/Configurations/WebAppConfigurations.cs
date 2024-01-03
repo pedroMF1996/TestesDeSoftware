@@ -6,7 +6,6 @@ using Nerdstore.Vendas.Data;
 using NerdStore.WebApp.MVC.Setup;
 using NerdStore.WebApp.MVC.Data;
 using Microsoft.OpenApi.Models;
-using AutoMapper;
 
 namespace NerdStore.WebApp.MVC.Configurations
 {
