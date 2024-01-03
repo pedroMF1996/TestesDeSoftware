@@ -1,10 +1,11 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Nerdstore.Core.DomainObjects;
 
 
 namespace Nerdstore.Vendas.Domain.Entidades
 {
-    public class Voucher
+    public class Voucher : Entity
     {
         public Voucher(string codigo, 
                        decimal? valorDesconto, 

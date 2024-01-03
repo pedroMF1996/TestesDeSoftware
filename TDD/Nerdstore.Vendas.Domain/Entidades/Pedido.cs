@@ -9,12 +9,16 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public static int MAX_UNIDADES_ITEM = 15;
         public static int MIN_UNIDADES_ITEM = 1;
 
+        public int Codigo { get; private set; }
         public Guid ClienteId { get; private set; }
         public decimal ValorTotal { get; private set; }
+        public PedidoStatus PedidoStatus { get; private set; }
         public decimal Desconto { get; private set; }
         public StatusPedido StatusPedido { get; private set; }
+        public Guid? VoucherId { get; private set; }
         public Voucher Voucher { get; private set; }
         public bool VoucherUtilizado { get; private set; }
+        public DateTime DataCadastro { get; private set; }
         public IReadOnlyCollection<PedidoItem> PedidoItems => _pedidoItems;
         private Collection<PedidoItem> _pedidoItems = new Collection<PedidoItem>();
 
@@ -145,6 +149,15 @@ namespace Nerdstore.Vendas.Domain.Entidades
         private bool VerificaValorDescontoMaiorQueValorTotal()
         {
             return Voucher.ValorDesconto.HasValue && Voucher.ValorDesconto.Value > ValorTotal;
+        }
+
+        public void AtualizarUnidades(PedidoItem pedidoItem, int quantidade)
+        {
+            pedidoItem.AdicionaQuantidade(quantidade);
+            TratarNumeroMaximoItemPedido(pedidoItem);
+
+            AtualizarQuantidadePedidoItemExistente(ref pedidoItem, pedidoItem.Id);
+            AtualizarItem(pedidoItem);
         }
 
         public static class PedidoFactory

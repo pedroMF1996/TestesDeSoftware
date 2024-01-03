@@ -3,7 +3,7 @@ using Nerdstore.Core.Messages;
 
 namespace Nerdstore.Core.DomainObjects
 {
-    internal class DomainNotification : Message, INotification
+    public class DomainNotification : Message, INotification
     {
         public DateTime Timestamp { get; private set; }
         public Guid DomainNotificationId { get; private set; }

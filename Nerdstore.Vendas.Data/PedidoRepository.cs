@@ -1,4 +1,5 @@
-﻿using Nerdstore.Core.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Nerdstore.Core.Data;
 using Nerdstore.Vendas.Domain.Entidades;
 using Nerdstore.Vendas.Domain.Repositories;
 
@@ -15,34 +16,67 @@ namespace Nerdstore.Vendas.Data
 
         public IUnitOfWork UnitOfWork => _vendasContext;
 
-        public void Adicionar(Pedido pedido)
+        public async Task<IEnumerable<Pedido>> ObterListaPorClienteId(Guid clienteId)
         {
-            throw new NotImplementedException();
+            return await _vendasContext.Pedidos.AsNoTracking().Where(p => p.ClienteId == clienteId).ToListAsync();
         }
 
-        public void AdicionarItem(PedidoItem pedidoItem)
+        public async Task<Pedido> ObterPedidoRascunhoPorClienteId(Guid clienteId)
         {
-            throw new NotImplementedException();
+            var pedido = await _vendasContext.Pedidos.FirstOrDefaultAsync(p => p.ClienteId == clienteId && p.PedidoStatus == PedidoStatus.Rascunho);
+            if (pedido == null) return null;
+
+            await _vendasContext.Entry(pedido)
+                .Collection(i => i.PedidoItems).LoadAsync();
+
+            if (pedido.VoucherId != null)
+            {
+                await _vendasContext.Entry(pedido)
+                    .Reference(i => i.Voucher).LoadAsync();
+            }
+
+            return pedido;
+        }
+
+        public void Adicionar(Pedido pedido)
+        {
+            _vendasContext.Pedidos.Add(pedido);
         }
 
         public void Atualizar(Pedido pedido)
         {
-            throw new NotImplementedException();
+            _vendasContext.Pedidos.Update(pedido);
+        }
+
+
+        public async Task<PedidoItem> ObterItemPorPedido(Guid pedidoId, Guid produtoId)
+        {
+            return await _vendasContext.PedidoItems.FirstOrDefaultAsync(p => p.ProdutoId == produtoId && p.Id == pedidoId);
+        }
+
+        public void AdicionarItem(PedidoItem pedidoItem)
+        {
+            _vendasContext.PedidoItems.Add(pedidoItem);
         }
 
         public void AtualizarItem(PedidoItem pedidoItem)
         {
-            throw new NotImplementedException();
+            _vendasContext.PedidoItems.Update(pedidoItem);
+        }
+
+        public void RemoverItem(PedidoItem pedidoItem)
+        {
+            _vendasContext.PedidoItems.Remove(pedidoItem);
+        }
+
+        public async Task<Voucher> ObterVoucherPorCodigo(string codigo)
+        {
+            return await _vendasContext.Vouchers.FirstOrDefaultAsync(p => p.Codigo == codigo);
         }
 
         public void Dispose()
         {
-            _vendasContext?.Dispose();
-        }
-
-        public Task<Pedido> ObterPedidoRascunhoPorClienteId(Guid clienteId)
-        {
-            throw new NotImplementedException();
+            _vendasContext.Dispose();
         }
     }
 }
