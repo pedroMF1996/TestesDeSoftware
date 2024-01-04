@@ -6,6 +6,9 @@ using Nerdstore.Vendas.Data;
 using NerdStore.WebApp.MVC.Setup;
 using NerdStore.WebApp.MVC.Data;
 using Microsoft.OpenApi.Models;
+using NerdStore.WebApp.MVC.Models;
+using System.Reflection;
+using System.Globalization;
 
 namespace NerdStore.WebApp.MVC.Configurations
 {
@@ -13,36 +16,51 @@ namespace NerdStore.WebApp.MVC.Configurations
     {
         public static void AddConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMvc(options => options.EnableEndpointRouting = false);
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            // Add services to the container.
+            var connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connectionString));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
             services.AddDbContext<CatalogoContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(connectionString));
 
             services.AddDbContext<VendasContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddDefaultIdentity<IdentityUser>()
-                    .AddDefaultUI()
-                    .AddEntityFrameworkStores<ApplicationDbContext>();
+                options.UseSqlServer(connectionString));
 
             services.AddDatabaseDeveloperPageExceptionFilter();
 
+            services.AddDefaultIdentity<IdentityUser>(
+                options => {
+                    options.SignIn.RequireConfirmedAccount = false;
+                }).AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.Configure<AppSettings>(configuration.GetSection("AppSettings"));
+
+            services.AddControllersWithViews();
+
             services.AddHttpContextAccessor();
+
+            services.AddAutoMapper(typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile));
+
+            services.AddMediatR(config => config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
+            services.RegisterServices();
+
+            services.AddEndpointsApiExplorer();
+
             services.AddSwaggerGen(c =>
             {
-                var security = new Dictionary<string, IEnumerable<string>>
+                c.SwaggerDoc("v1", new OpenApiInfo()
                 {
-                    {"Bearer", new string[] { }}
-                };
+                    Title = "desenvolvedor.io API",
+                    Description = "desenvolvedor.io  API",
+                    Contact = new OpenApiContact() { Name = "Eduardo Pires", Email = "contato@desenvolvedor.io" },
+                    License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/Licenses/MIT") }
+                });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -54,12 +72,12 @@ namespace NerdStore.WebApp.MVC.Configurations
                     Type = SecuritySchemeType.ApiKey
                 });
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                        new OpenApiSecurityScheme()
+                        new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference()
+                            Reference = new OpenApiReference
                             {
                                 Type = ReferenceType.SecurityScheme,
                                 Id = "Bearer"
@@ -69,26 +87,15 @@ namespace NerdStore.WebApp.MVC.Configurations
                     }
                 });
 
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "desenvolvedor.io API",
-                    Description = "desenvolvedor.io  API",
-                    TermsOfService = null,
-                    Contact = new OpenApiContact { Name = "desenvolvedor.io", Email = "email@desenvolvedor.io", Url = new Uri("http://desenvolvedor.io") },
-                    License = new OpenApiLicense { Name = "MIT", Url = new Uri("http://desenvolvedor.io/licensa") }
-                });
             });
-
-            services.AddAutoMapperConfig([typeof(DomainToViewModelMappingProfile), typeof(ViewModelToDomainMappingProfile)]);
-            
-            services.AddMediatR(cnfg => cnfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
-
-            services.RegisterServices();
         }
 
         public static void UseConfigureServices(this IApplicationBuilder app, IWebHostEnvironment environment)
         {
+            var cultureInfo = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+            CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+
             // Configure the HTTP request pipeline.
             if (environment.IsDevelopment())
             {
@@ -104,23 +111,17 @@ namespace NerdStore.WebApp.MVC.Configurations
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+
+            app.UseRouting();
 
             app.UseAuthentication();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Vitrine}/{action=Index}/{id?}");
-            });
+            app.UseAuthorization();
 
             app.UseSwagger();
             app.UseSwaggerUI(s =>
             {
                 s.SwaggerEndpoint("/swagger/v1/swagger.json", "desenvolvedor.io API v1.0");
             });
-
         }
     }
 

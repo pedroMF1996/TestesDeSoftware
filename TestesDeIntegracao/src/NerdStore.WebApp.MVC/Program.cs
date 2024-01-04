@@ -1,19 +1,34 @@
 using NerdStore.WebApp.MVC.Configurations;
 
-var builder = WebApplication.CreateBuilder(args);
+namespace NerdStore.WebApp.MVC
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
 
-builder.Configuration
-    .SetBasePath(builder.Environment.ContentRootPath)
-    .AddJsonFile("appsettings.json", true, true)
-    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
-    .AddEnvironmentVariables();
+            var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddConfigureServices(builder.Configuration);
+            builder.Configuration
+                .SetBasePath(builder.Environment.ContentRootPath)
+                .AddJsonFile("appsettings.json", true, true)
+                .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", true, true)
+                .AddEnvironmentVariables();
 
-var app = builder.Build();
+            // Add services to the container.
+            builder.Services.AddConfigureServices(builder.Configuration);
 
-// Configure the HTTP request pipeline.
-app.UseConfigureServices(app.Environment);
+            var app = builder.Build();
 
-app.Run();
+            // Configure the HTTP request pipeline.
+            app.UseConfigureServices(app.Environment);
+            
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Vitrine}/{action=Index}/{id?}");
+            app.MapRazorPages();
+
+            app.Run();
+        }
+    }
+}

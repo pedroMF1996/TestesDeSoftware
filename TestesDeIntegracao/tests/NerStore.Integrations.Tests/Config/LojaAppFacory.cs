@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Hosting;
 
 namespace NerStore.Integrations.Tests.Config
 {
-    public class LojaAppFacory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
+    public class LojaAppFacory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
     {
-        protected override void ConfigureWebHost(IWebHostBuilder builder)
+        protected override IHost CreateHost(IHostBuilder builder)
         {
-            builder.UseStartup<TStartup>();
             builder.UseEnvironment("Testing");
-            
-            base.ConfigureWebHost(builder);
+            return base.CreateHost(builder);
         }
     }
 }

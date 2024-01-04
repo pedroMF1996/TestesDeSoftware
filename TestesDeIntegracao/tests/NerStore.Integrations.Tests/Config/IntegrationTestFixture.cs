@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
+using NerdStore.WebApp.MVC;
 
 namespace NerStore.Integrations.Tests.Config
 {
@@ -21,7 +21,7 @@ namespace NerStore.Integrations.Tests.Config
         {
             var clientOptions = new WebApplicationFactoryClientOptions()
             {
-
+                BaseAddress = new Uri("https://localhost")
             };
 
             Factory = new LojaAppFacory<TStartup>();

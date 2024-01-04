@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.TestHost;
-using NerStore.Integrations.Tests;
+using NerStore.Integrations.Tests.Config;
 
 namespace NerdStore.WebApp.Tests
 {
