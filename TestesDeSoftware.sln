@@ -47,7 +47,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdStore.WebApp.MVC", "Tes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{120D715A-546B-48BA-BA8E-34FBD5B2825F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerStore.Integrations.Tests", "TestesDeIntegracao\tests\NerStore.Integrations.Tests\NerStore.Integrations.Tests.csproj", "{2DF76D6D-8514-4D31-A5FF-38D68462ACB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerStore.Integrations.Tests", "TestesDeIntegracao\tests\NerStore.Integrations.Tests\NerStore.Integrations.Tests.csproj", "{2DF76D6D-8514-4D31-A5FF-38D68462ACB6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{36436661-CF9D-4B24-A090-2FFAA628EE06}"
+	ProjectSection(SolutionItems) = preProject
+		TestesDeIntegracao\sql\ScriptInsert.sql = TestesDeIntegracao\sql\ScriptInsert.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -144,6 +149,7 @@ Global
 		{25139340-3BB4-4D7C-90D5-2B7587978CE9} = {F380BB9F-D9DF-4E26-84D3-A64C90DAE8F1}
 		{120D715A-546B-48BA-BA8E-34FBD5B2825F} = {F380BB9F-D9DF-4E26-84D3-A64C90DAE8F1}
 		{2DF76D6D-8514-4D31-A5FF-38D68462ACB6} = {120D715A-546B-48BA-BA8E-34FBD5B2825F}
+		{36436661-CF9D-4B24-A090-2FFAA628EE06} = {F380BB9F-D9DF-4E26-84D3-A64C90DAE8F1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {894F69A6-DEE1-4514-9AAE-F9D4DB2FA13C}

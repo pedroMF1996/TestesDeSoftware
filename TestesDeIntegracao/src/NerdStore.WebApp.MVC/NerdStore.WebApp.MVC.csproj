@@ -37,5 +37,10 @@
     <ProjectReference Include="..\..\..\TDD\Nerdstore.Vendas.Application\Nerdstore.Vendas.Application.csproj" />
     <ProjectReference Include="..\NerdStore.Catalogo.Application\NerdStore.Catalogo.Application.csproj" />
   </ItemGroup>
-
+ <ItemGroup>
+    <Content Include="..\..\sql\ScriptInsert.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		<Link>wwwroot\sql\ScriptInsert.sql</Link>
+    </Content>
+  </ItemGroup>
 </Project>

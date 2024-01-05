@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using NerdStore.WebApp.MVC.Models;
 using System.Reflection;
 using System.Globalization;
+using NerdStore.WebApp.MVC.Extensions;
 
 namespace NerdStore.WebApp.MVC.Configurations
 {
@@ -18,9 +19,6 @@ namespace NerdStore.WebApp.MVC.Configurations
         {
             // Add services to the container.
             var connectionString = configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
@@ -81,6 +79,11 @@ namespace NerdStore.WebApp.MVC.Configurations
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseStaticFiles();
+
+            app.UseEnsureDatabaseMigrations<ApplicationDbContext>();
+            app.UseEnsureDatabaseMigrations<CatalogoContext>();
+            app.UseEnsureDatabaseMigrations<VendasContext>();
         }
     }
 
