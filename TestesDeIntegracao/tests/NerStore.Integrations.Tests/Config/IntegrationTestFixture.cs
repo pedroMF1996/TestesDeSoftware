@@ -87,7 +87,30 @@ namespace NerStore.Integrations.Tests.Config
             };
 
             await HttpClient.SendAsync(postRequest);
-        }   
+        }
+
+        public async Task RealizarRegistrarUsuarioTesteWeb()
+        {
+            var urlRegister = "/Identity/Account/Register";
+            var initialResponse = await HttpClient.GetAsync(urlRegister);
+            initialResponse.EnsureSuccessStatusCode();
+            var antiForgeryToken = ObterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
+
+            var formData = new Dictionary<string, string>()
+            {
+                { "Input.Email", "teste@teste.com"},
+                { "Input.Password", "Teste@123"},
+                { "Input.ConfirmPassword", "Teste@123"},
+                { AntiForgeryFieldName, antiForgeryToken}
+            };
+
+            var postRequest = new HttpRequestMessage(HttpMethod.Post, urlRegister)
+            {
+                Content = new FormUrlEncodedContent(formData)
+            };
+
+            await HttpClient.SendAsync(postRequest);
+        }
 
         public void GerarUserSenha()
         {
