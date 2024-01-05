@@ -14,10 +14,10 @@ namespace NerStore.Integrations.Tests.Config
     public class IntegrationWebTestsFixtureCollection : ICollectionFixture<IntegrationTestsFixture<Program>>
     { }
 
-    public class IntegrationTestsFixture<TStartup> : IDisposable where TStartup : class
+    public class IntegrationTestsFixture<TProgram> : IDisposable where TProgram : class
     {
 
-        public readonly LojaAppFacory<TStartup> Factory;
+        public readonly LojaAppFacory<TProgram> Factory;
         public HttpClient HttpClient;
         public readonly string AntiForgeryFieldName = "__RequestVerificationToken";
         public readonly string UsuarioEmail;
