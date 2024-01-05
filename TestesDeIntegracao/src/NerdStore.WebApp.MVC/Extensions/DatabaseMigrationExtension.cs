@@ -12,6 +12,7 @@ namespace NerdStore.WebApp.MVC.Extensions
             try
             {
                 dataBaseContext.Database.Migrate();
+                Console.WriteLine("Banco de Dados Criado");
             }
             catch (Exception)
             {
@@ -26,6 +27,7 @@ namespace NerdStore.WebApp.MVC.Extensions
             var dataBaseContext = app.ApplicationServices.CreateScope()
                                         .ServiceProvider.GetRequiredService<T>();
             Seed(dataBaseContext);
+            Console.WriteLine("Banco de Dados Populado");
         }
 
         private static void Seed<T>(T dbContext) where T : DbContext
