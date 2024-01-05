@@ -147,7 +147,7 @@ namespace Nerdstore.Vendas.Application.Commands
 
         private Pedido PedidoExistente(Pedido pedido, PedidoItem pedidoItem)
         {
-            var pedidoItemExistente = pedido.ExistePedidoItem(pedidoItem.Id);
+            var pedidoItemExistente = pedido.ExistePedidoItem(pedidoItem.ProdutoId);
             
             pedido.AdicionarItem(pedidoItem);
             

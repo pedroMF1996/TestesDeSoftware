@@ -2,10 +2,10 @@
 
 namespace Nerdstore.Vendas.Domain.Entidades
 {
-    public class PedidoItem 
+    public class PedidoItem : Entity
     {
-        public Guid Id { get; private set; }
         public Guid ProdutoId { get; set; }
+        public Guid PedidoId { get; set; }
         public string Nome { get; private set; }
         public int Quantidade { get; private set; }
         public decimal ValorUnitario { get; private set; }
@@ -17,10 +17,15 @@ namespace Nerdstore.Vendas.Domain.Entidades
         {
             
             if (quantidade < Pedido.MIN_UNIDADES_ITEM) throw new DomainException($"Minimo de {Pedido.MIN_UNIDADES_ITEM} unidades por produto");
-            Id = id;
+            ProdutoId = id;
             Nome = nome;
             Quantidade = quantidade;
             ValorUnitario = valor;
+        }
+
+        public void AssociarPedido(Guid pedidoId)
+        {
+            PedidoId = pedidoId;
         }
 
         public void AdicionaQuantidade(int quantidade)
