@@ -25,6 +25,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
         protected Pedido(Guid clienteId)
         {
             ClienteId = clienteId;
+            DataCadastro = DateTime.Now;
             TornarRascunho();
         }
 
