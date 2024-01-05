@@ -1,4 +1,5 @@
 ﻿using AngleSharp.Html.Parser;
+using FluentAssertions;
 using Microsoft.AspNetCore.Components.Forms;
 using NerdStore.WebApp.MVC;
 using NerStore.Integrations.Tests.Config;
@@ -15,9 +16,9 @@ namespace NerdStore.WebApp.Tests
             _testsFixture = testsFixture;
         }
 
-        [Fact(DisplayName = "Mudar")]
+        [Fact(DisplayName = "Adicionar Item NovoPedido Deve Atualizar Valor Total")]
         [Trait("Categoria", "Integracao Web - Pedido")]
-        public async Task AdicionarItem_NovoPedido_DeveDeveAtualizarValorTotal()
+        public async Task AdicionarItem_NovoPedido_DeveAtualizarValorTotal()
         {
             // Arrange
             await _testsFixture.RealizarRegistrarUsuarioWeb();
@@ -31,8 +32,7 @@ namespace NerdStore.WebApp.Tests
             var formData = new Dictionary<string, string>()
             {
                 {"Id", produtoId.ToString() },
-                {"quantidade", quantidade.ToString() },
-            
+                {"quantidade", quantidade.ToString() }
             };
 
             var postRequest = new HttpRequestMessage(HttpMethod.Post, "/meu-carrinho")
@@ -53,10 +53,12 @@ namespace NerdStore.WebApp.Tests
                             .Result
                             .All;
 
-            var formQuantidade = html?.FirstOrDefault(e => e.Id == "quantidade")?.GetAttribute("value");
-            var formValorUnitario = html?.FirstOrDefault(e => e.Id == "valorUnitario")?.TextContent;
-            var formValorTotal = html?.FirstOrDefault(e => e.Id == "valorTotal")?.TextContent;
-            var test = html;
+            var formQuantidade = html?.FirstOrDefault(e => e.Id == "quantidade")?.GetAttribute("value").OnlyNumebrs();
+            var formValorUnitario = html?.FirstOrDefault(e => e.Id == "valorUnitario")?.TextContent?.Split('.')[0].OnlyNumebrs();
+            var formValorTotal = html?.FirstOrDefault(e => e.Id == "valorTotal")?.TextContent?.Split('.')[0].OnlyNumebrs();
+
+            formQuantidade.Should().Be(2);
+            formValorTotal.Should().Be(formQuantidade*formValorUnitario);
         }
     }
 }
