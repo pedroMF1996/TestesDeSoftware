@@ -20,16 +20,15 @@ namespace NerStore.Integrations.Tests
         {
             // Arrange
             var urlRegister = "/Identity/Account/Register";
-            var email = "teste@teste.com";
             var initialResponse = await _fixture.HttpClient.GetAsync(urlRegister);
             initialResponse.EnsureSuccessStatusCode();
             var antiForgeryToken = _fixture.ObiterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
 
             var formData = new Dictionary<string, string>()
             {
-                { "Input.Email", email},
-                { "Input.Password", "Teste@123"},
-                { "Input.ConfirmPassword", "Teste@123"},
+                { "Input.Email", _fixture.UsuarioEmail},
+                { "Input.Password", _fixture.UsuarioSenha},
+                { "Input.ConfirmPassword", _fixture.UsuarioConfirmarSenha},
                 { _fixture.AntiForgeryFieldName, antiForgeryToken}
             };
 
@@ -44,7 +43,7 @@ namespace NerStore.Integrations.Tests
             // Assert
             var responseString = await postResponse.Content.ReadAsStringAsync();
             postResponse.EnsureSuccessStatusCode();
-            responseString.Should().Contain($"Hello {email}!");
+            responseString.Should().Contain($"Hello {_fixture.UsuarioEmail}!");
         }
 
     }
