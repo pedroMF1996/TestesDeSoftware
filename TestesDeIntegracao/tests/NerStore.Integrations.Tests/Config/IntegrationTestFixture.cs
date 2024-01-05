@@ -31,7 +31,7 @@ namespace NerStore.Integrations.Tests.Config
                 BaseAddress = new Uri("https://localhost")
             };
 
-            Factory = new LojaAppFacory<TStartup>();
+            Factory = new LojaAppFacory<TProgram>();
             HttpClient = Factory.CreateClient(clientOptions);
             var faker = new Faker("pt_BR");
 
