@@ -23,6 +23,8 @@ namespace NerStore.Integrations.Tests.Config
         public readonly string UsuarioEmail;
         public readonly string UsuarioSenha;
         public readonly string UsuarioConfirmarSenha;
+        public readonly string UsuarioSenhaFraca;
+        public readonly string UsuarioConfirmarSenhaFraca;
 
         public IntegrationTestsFixture()
         {
@@ -40,6 +42,9 @@ namespace NerStore.Integrations.Tests.Config
             UsuarioEmail = faker.Internet.Email();
             UsuarioSenha = faker.Internet.Password(8, false, "", "@1Ab_");
             UsuarioConfirmarSenha = UsuarioSenha;
+            
+            UsuarioSenhaFraca = "12345678";
+            UsuarioConfirmarSenhaFraca = UsuarioSenhaFraca;
 
             #endregion
 
