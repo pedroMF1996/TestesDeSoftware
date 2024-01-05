@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using NerdStore.WebApp.MVC;
+using System.Text.RegularExpressions;
 
 namespace NerStore.Integrations.Tests.Config
 {
@@ -16,7 +17,7 @@ namespace NerStore.Integrations.Tests.Config
 
         public readonly LojaAppFacory<TStartup> Factory;
         public HttpClient HttpClient;
-
+        public string AntiForgeryFieldName = "__RequestVerificationToken";
         public IntegrationTestsFixture()
         {
             var clientOptions = new WebApplicationFactoryClientOptions()
@@ -28,7 +29,16 @@ namespace NerStore.Integrations.Tests.Config
             HttpClient = Factory.CreateClient(clientOptions);
         }
 
+        public string ObiterAntiForgeryToken(string htmlBody)
+        {
+            var requestVerificationTokenMatch =
+                Regex.Match(htmlBody, $@"\<input name=""{AntiForgeryFieldName}"" type=""hidden"" value=""([^""]+)"" \/\>");
 
+            if (requestVerificationTokenMatch.Success)
+                return requestVerificationTokenMatch.Groups[1].Captures[0].Value;
+
+            throw new ArgumentException($"AntiForgeryToken {AntiForgeryFieldName} nao encontrado no HTML {htmlBody}");
+        }
 
         public void Dispose()
         {
