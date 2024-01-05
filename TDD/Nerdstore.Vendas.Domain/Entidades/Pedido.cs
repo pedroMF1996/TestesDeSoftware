@@ -107,6 +107,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
             var result = voucher.ValidarSeAplicavel();
             if (!result.IsValid) return result;
 
+            voucher.AplicarVoucher();
             Voucher = voucher;
             VoucherUtilizado = true;
 

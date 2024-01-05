@@ -4,7 +4,7 @@ using NerStore.Integrations.Tests.Config;
 namespace NerdStore.WebApp.Tests
 {
     [Collection(nameof(IntegrationWebTestsFixtureCollection))]
-    public class PedidoWebTests
+    public class PedidoWebTests : IClassFixture<IntegrationTestsFixture<Program>>
     {
         private readonly IntegrationTestsFixture<Program> _testsFixture;
 
