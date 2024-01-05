@@ -9,8 +9,16 @@ namespace NerdStore.WebApp.MVC.Extensions
         {
             var dataBaseContext = app.ApplicationServices.CreateScope()
                                         .ServiceProvider.GetRequiredService<T>();
+            try
+            {
+                dataBaseContext.Database.Migrate();
+            }
+            catch (Exception)
+            {
 
-            dataBaseContext.Database.Migrate();
+                throw new ArgumentException("Nao foi possivel estabelecer uma conexao com o banco de dados para garantir as Migrations, " +
+                    "favor garantir que a connection string esteja correta");
+            }
         }
 
         public static void UseEnsureSeedDatabase<T>(this IApplicationBuilder app) where T : DbContext
@@ -36,11 +44,10 @@ namespace NerdStore.WebApp.MVC.Extensions
                     dbContext.Database.CloseConnection();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                throw new ArgumentException($"Erro ao alimentar o banco: {ex.Message}");
+                Console.WriteLine("Banco de dados Ja populado"); 
             }
-            
         }
     }
 }
