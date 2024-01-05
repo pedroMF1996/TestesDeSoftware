@@ -15,6 +15,7 @@ namespace NerdStore.WebApp.Tests
         public PedidoApiTests(IntegrationTestsFixture<Program> testsFixture)
         {
             _testsFixture = testsFixture;
+            _testsFixture.RealizarRegistrarUsuarioTesteWeb().Wait();
         }
 
         [Fact(DisplayName = "Adicionar item em novo pedido"), TestPriority(1)]

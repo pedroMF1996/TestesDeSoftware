@@ -10,11 +10,10 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public static int MIN_UNIDADES_ITEM = 1;
 
         public int Codigo { get; private set; }
-        public Guid ClienteId { get; private set; }
+        public Guid ClienteId { get; set; }
         public decimal ValorTotal { get; private set; }
         public PedidoStatus PedidoStatus { get; private set; }
         public decimal Desconto { get; private set; }
-        public StatusPedido StatusPedido { get; private set; }
         public Guid? VoucherId { get; private set; }
         public Voucher Voucher { get; private set; }
         public bool VoucherUtilizado { get; private set; }
@@ -22,9 +21,8 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public IReadOnlyCollection<PedidoItem> PedidoItems => _pedidoItems;
         private Collection<PedidoItem> _pedidoItems = new Collection<PedidoItem>();
 
-        protected Pedido(Guid clienteId)
+        protected Pedido()
         {
-            ClienteId = clienteId;
             DataCadastro = DateTime.Now;
             TornarRascunho();
         }
@@ -52,7 +50,6 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
             _pedidoItems.Remove(pedidoItemExistente);
 
-            pedidoItem.RecuperarId(pedidoItemExistente.Id);
             pedidoItem.AssociarPedido(Id);
             
             _pedidoItems.Add(pedidoItem);
@@ -77,7 +74,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
         private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem, Guid pedidoItemProdutoId)
         {
             if (ExistePedidoItem(pedidoItemProdutoId) is PedidoItem pedidoItemExistente)
-            { 
+            {
                 _pedidoItems.Remove(pedidoItemExistente);
                 pedidoItemExistente.AdicionaQuantidade(pedidoItem.Quantidade);
                 pedidoItem = pedidoItemExistente;
@@ -98,7 +95,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         private void TornarRascunho()
         {
-            StatusPedido = StatusPedido.Rascunho;
+            PedidoStatus = PedidoStatus.Rascunho;
         }
 
         private void TratarPedidoItemInexistente(PedidoItem pedidoItem)
@@ -169,17 +166,13 @@ namespace Nerdstore.Vendas.Domain.Entidades
         {
             public static Pedido NovoPedidoRascunho(Guid clienteId)
             {
-                return new Pedido(clienteId);
+                var pedido = new Pedido() 
+                {
+                    ClienteId = clienteId,
+                };
+                pedido.TornarRascunho();
+                return pedido;
             }
         }
-    }
-
-    public enum StatusPedido
-    {
-        Rascunho,
-        Iniciado,
-        Pago,
-        Entregue,
-        Cancelado
     }
 }

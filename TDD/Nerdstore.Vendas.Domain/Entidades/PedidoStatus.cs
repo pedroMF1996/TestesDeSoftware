@@ -2,7 +2,7 @@
 {
     public enum PedidoStatus
     {
-        Rascunho = 0,
+        Rascunho = 999,
         Iniciado = 1,
         Pago = 4,
         Entregue = 5,

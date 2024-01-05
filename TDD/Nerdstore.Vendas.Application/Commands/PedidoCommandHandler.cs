@@ -86,7 +86,7 @@ namespace Nerdstore.Vendas.Application.Commands
 
             var pedidoItem = await _repository.ObterItemPorPedido(pedido.Id, message.ProdutoId);
 
-            if (pedidoItem != null && pedido.ExistePedidoItem(pedidoItem.ProdutoId) is null)
+            if (pedidoItem == null || !pedido.PedidoItems.Any(i => i.Id == pedidoItem.Id))
             {
                 AddErro("Item do pedido não encontrado!");
                 return await LancarErros("pedido", cancellationToken);
