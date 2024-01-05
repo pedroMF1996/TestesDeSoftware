@@ -1,11 +1,13 @@
-﻿using Microsoft.VisualStudio.TestPlatform.TestHost;
+﻿using NerdStore.WebApp.MVC;
+using NerdStore.WebApp.MVC.Models;
 using NerStore.Integrations.Tests.Config;
+using System.Net.Http.Json;
 
 namespace NerdStore.WebApp.Tests
 {
-    [TestCaseOrderer("Features.Tests.PriorityOrderer", "Features.Tests")]
     [Collection(nameof(IntegrationApiTestsFixtureCollection))]
-    public class PedidoApiTests
+    [TestCaseOrderer("Features.Testes.PriorityOrderer", "Features.Testes")]
+    public class PedidoApiTests: IClassFixture<IntegrationTestsFixture<Program>>
     {
         private readonly IntegrationTestsFixture<Program> _testsFixture;
 
@@ -14,6 +16,27 @@ namespace NerdStore.WebApp.Tests
             _testsFixture = testsFixture;
         }
 
-        
+        [Fact(DisplayName = "Adicionar item em novo pedido")]
+        [Trait("Categoria", "Integracao API - Pedidos")]
+        public async Task AdicionarItem_NovoPedido_DeveRetornarComSucesso()
+        {
+            // Arrange
+            var produtoId = new Guid("6ecaaa6b-ad9f-422c-b3bb-6013ec27c4bb");
+            var itemInfo = new ItemViewModel()
+            {
+                Id = produtoId,
+                Quantidade = 2,
+            };
+
+            await _testsFixture.RealizarLoginApi();
+
+            _testsFixture.HttpClient.AtribuirToken(_testsFixture.UserToken);
+
+            // Act
+            var postResponse = await _testsFixture.HttpClient.PostAsJsonAsync("api/carrinho", itemInfo);
+
+            // Assert
+            postResponse.EnsureSuccessStatusCode();
+        }    
     }
 }

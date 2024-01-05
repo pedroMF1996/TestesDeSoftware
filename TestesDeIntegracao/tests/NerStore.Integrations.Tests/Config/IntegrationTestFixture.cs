@@ -27,6 +27,7 @@ namespace NerStore.Integrations.Tests.Config
         public readonly string UsuarioConfirmarSenha;
         public readonly string UsuarioSenhaFraca;
         public readonly string UsuarioConfirmarSenhaFraca;
+        public string UserToken;
 
         public IntegrationTestsFixture()
         {
@@ -44,8 +45,7 @@ namespace NerStore.Integrations.Tests.Config
 
             #region Credenciais
 
-            UsuarioEmail = faker.Internet.Email();
-            UsuarioSenha = faker.Internet.Password(8, false, "", "@1Ab_");
+            GerarUserSenha();
             UsuarioConfirmarSenha = UsuarioSenha;
             
             UsuarioSenhaFraca = "12345678";
@@ -96,21 +96,6 @@ namespace NerStore.Integrations.Tests.Config
             UsuarioSenha = faker.Internet.Password(8, false, "", "@1Ab_");
         }
 
-        public async Task RealizarLoginApi()
-        {
-            var userData = new LoginViewModel
-            {
-                Email = "teste@teste.com",
-                Senha = "Teste@123"
-            };
-
-            // Recriando o client para evitar configurações de Web
-            HttpClient = Factory.CreateClient();
-
-            var response = await HttpClient.PostAsJsonAsync("api/login", userData);
-            response.EnsureSuccessStatusCode();
-        }
-
         public async Task RealizarLoginWeb()
         {
             var initialResponse = await HttpClient.GetAsync("/Identity/Account/Login");
@@ -131,6 +116,22 @@ namespace NerStore.Integrations.Tests.Config
             };
 
             await HttpClient.SendAsync(postRequest);
+        }
+
+        public async Task RealizarLoginApi()
+        {
+            var userData = new LoginViewModel
+            {
+                Email = "teste@teste.com",
+                Senha = "Teste@123"
+            };
+
+            // Recriando o client para evitar configurações de Web
+            HttpClient = Factory.CreateClient();
+
+            var response = await HttpClient.PostAsJsonAsync("api/login", userData);
+            response.EnsureSuccessStatusCode();
+            UserToken = await response.Content.ReadAsStringAsync();
         }
 
         public void Dispose()
