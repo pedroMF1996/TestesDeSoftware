@@ -57,7 +57,7 @@ namespace Nerdstore.Vendas.Application.Commands
 
             var pedidoItem = await _repository.ObterItemPorPedido(pedido.Id, message.ProdutoId);
 
-            if (!pedido.ExistePedidoItem(pedidoItem.Id))
+            if (pedido.ExistePedidoItem(pedidoItem.ProdutoId) is null)
             {
                 AddErro("Item do pedido não encontrado!");
                 return await LancarErros("pedido", cancellationToken);
@@ -86,7 +86,7 @@ namespace Nerdstore.Vendas.Application.Commands
 
             var pedidoItem = await _repository.ObterItemPorPedido(pedido.Id, message.ProdutoId);
 
-            if (pedidoItem != null && !pedido.ExistePedidoItem(pedidoItem.Id))
+            if (pedidoItem != null && pedido.ExistePedidoItem(pedidoItem.ProdutoId) is null)
             {
                 AddErro("Item do pedido não encontrado!");
                 return await LancarErros("pedido", cancellationToken);
@@ -147,14 +147,16 @@ namespace Nerdstore.Vendas.Application.Commands
 
         private Pedido PedidoExistente(Pedido pedido, PedidoItem pedidoItem)
         {
-            var pedidoItemExistente = pedido.ExistePedidoItem(pedidoItem.ProdutoId);
-            
-            pedido.AdicionarItem(pedidoItem);
-            
-            if (pedidoItemExistente)
-                _repository.AtualizarItem(pedidoItem);
+            if (pedido.ExistePedidoItem(pedidoItem.ProdutoId) is PedidoItem pedidoItemExistente)
+            {
+                pedidoItemExistente.AlterarQuantidade(pedidoItem.Quantidade);
+                _repository.AtualizarItem(pedidoItemExistente);
+            }
             else
+            {
+                pedido.AdicionarItem(pedidoItem);
                 _repository.AdicionarItem(pedidoItem);
+            }
 
             _repository.Atualizar(pedido);
             

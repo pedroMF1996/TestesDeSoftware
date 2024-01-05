@@ -32,6 +32,16 @@ namespace Nerdstore.Vendas.Domain.Entidades
         {
             Quantidade += quantidade;
         }
+        
+        public void AlterarQuantidade(int quantidade)
+        {
+            Quantidade = quantidade;
+        }
+
+        public void RecuperarId(Guid id)
+        {
+            Id = id;
+        }
 
         public decimal CalcularValor()
         {
