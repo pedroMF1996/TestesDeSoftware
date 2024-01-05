@@ -25,7 +25,7 @@ namespace NerStore.Integrations.Tests
             var urlRegister = "/Identity/Account/Register";
             var initialResponse = await _fixture.HttpClient.GetAsync(urlRegister);
             initialResponse.EnsureSuccessStatusCode();
-            var antiForgeryToken = _fixture.ObiterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
+            var antiForgeryToken = _fixture.ObterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
 
             var formData = new Dictionary<string, string>()
             {
@@ -47,7 +47,7 @@ namespace NerStore.Integrations.Tests
             var responseString = await postResponse.Content.ReadAsStringAsync();
             postResponse.EnsureSuccessStatusCode();
             responseString.Should().Contain($"Hello {_fixture.UsuarioEmail}!");
-        }
+        }   
         
         [Fact(DisplayName = "Nao Realizar Cadastro Com Sucesso De Usuario Com Senha Fraca"), TestPriority(2)]
         [Trait("Categoria", "Integracao Web - Usuario")]
@@ -57,7 +57,7 @@ namespace NerStore.Integrations.Tests
             var urlRegister = "/Identity/Account/Register";
             var initialResponse = await _fixture.HttpClient.GetAsync(urlRegister);
             initialResponse.EnsureSuccessStatusCode();
-            var antiForgeryToken = _fixture.ObiterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
+            var antiForgeryToken = _fixture.ObterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
 
             var formData = new Dictionary<string, string>()
             {
@@ -91,7 +91,7 @@ namespace NerStore.Integrations.Tests
             var urlLogin = "/Identity/Account/Login";
             var initialResponse = await _fixture.HttpClient.GetAsync(urlLogin);
             initialResponse.EnsureSuccessStatusCode();
-            var antiForgeryToken = _fixture.ObiterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
+            var antiForgeryToken = _fixture.ObterAntiForgeryToken(await initialResponse.Content.ReadAsStringAsync());
 
             var formData = new Dictionary<string, string>()
             {
