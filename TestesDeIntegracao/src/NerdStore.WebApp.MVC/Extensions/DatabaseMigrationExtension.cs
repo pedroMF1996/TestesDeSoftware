@@ -17,28 +17,30 @@ namespace NerdStore.WebApp.MVC.Extensions
         {
             var dataBaseContext = app.ApplicationServices.CreateScope()
                                         .ServiceProvider.GetRequiredService<T>();
-
+            Seed(dataBaseContext);
         }
 
-        private static void LerArquivo()
+        private static void Seed<T>(T dbContext) where T : DbContext
         {
-            // Caminho relativo para o arquivo dentro do projeto
-            string caminhoArquivo = Path.Combine("sql", "ScriptInsert.sql");
-
             try
             {
-                string caminhoFisico = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", caminhoArquivo);
+                string caminhoFisico = Path.Combine("..\\..\\sql\\ScriptInsert.sql");
 
                 using (StreamReader leitor = new StreamReader(caminhoFisico))
                 {
-                    string conteudo = leitor.ReadToEnd();
-                    Console.WriteLine(conteudo);
+                    dbContext.Database.OpenConnection();
+                    while (leitor.ReadLine() is string linha)
+                    {
+                        dbContext.Database.ExecuteSqlRaw(linha);
+                    }
+                    dbContext.Database.CloseConnection();
                 }
             }
             catch (Exception ex)
             {
-                throw new ArgumentException($"Erro ao ler o arquivo: {ex.Message}");
+                throw new ArgumentException($"Erro ao alimentar o banco: {ex.Message}");
             }
+            
         }
     }
 }

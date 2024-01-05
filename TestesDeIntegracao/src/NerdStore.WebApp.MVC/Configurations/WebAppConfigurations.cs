@@ -84,6 +84,8 @@ namespace NerdStore.WebApp.MVC.Configurations
             app.UseEnsureDatabaseMigrations<ApplicationDbContext>();
             app.UseEnsureDatabaseMigrations<CatalogoContext>();
             app.UseEnsureDatabaseMigrations<VendasContext>();
+
+            app.UseEnsureSeedDatabase<CatalogoContext>();
         }
     }
 

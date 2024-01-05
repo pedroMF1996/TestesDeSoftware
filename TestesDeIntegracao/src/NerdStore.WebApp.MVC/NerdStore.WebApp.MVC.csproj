@@ -40,7 +40,7 @@
  <ItemGroup>
     <Content Include="..\..\sql\ScriptInsert.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		<Link>wwwroot\sql\ScriptInsert.sql</Link>
+      <Link>wwwroot\sql\ScriptInsert.sql</Link>
     </Content>
   </ItemGroup>
 </Project>
