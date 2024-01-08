@@ -6,7 +6,7 @@
 Cenário: Realizar login com sucesso
 Dado Que um visitante esta acessando o site da loja
 Quando Ele clicar em login
-E Preencher os dados do formulario com uma senha sem caracteres especiais
+E Preencher os dados do formulario de login
 	| Dados					|
 	| Email					|
 	| Senha					|

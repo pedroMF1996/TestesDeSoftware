@@ -17,5 +17,11 @@ namespace NerdStore.BDD.Tests.Usuario
         {
             throw new PendingStepException();
         }
+
+        [When(@"Preencher os dados do formulario de login")]
+        public void WhenPreencherOsDadosDoFormularioDeLogin(Table table)
+        {
+            throw new PendingStepException();
+        }
     }
 }

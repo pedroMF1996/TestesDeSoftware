@@ -112,7 +112,7 @@ testRunner.When("Ele clicar em login", ((string)(null)), ((TechTalk.SpecFlow.Tab
                 table4.AddRow(new string[] {
                             "Senha"});
 #line 9
-testRunner.And("Preencher os dados do formulario com uma senha sem caracteres especiais", ((string)(null)), table4, "E ");
+testRunner.And("Preencher os dados do formulario de login", ((string)(null)), table4, "E ");
 #line hidden
 #line 13
 testRunner.And("Clicar no botao Login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "E ");
