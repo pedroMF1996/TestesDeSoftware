@@ -26,10 +26,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Usuario\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\TDD\Nerdstore.Vendas.Domain\Nerdstore.Vendas.Domain.csproj" />
   </ItemGroup>
 
