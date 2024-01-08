@@ -1,3 +1,4 @@
+using OpenQA.Selenium.Chrome;
 using System;
 using TechTalk.SpecFlow;
 
