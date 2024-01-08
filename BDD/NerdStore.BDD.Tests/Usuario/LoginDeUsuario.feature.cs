@@ -100,7 +100,7 @@ this.ScenarioInitialize(scenarioInfo);
             {
                 this.ScenarioStart();
 #line 7
-testRunner.Given("Que um usuario esta acessando o site da loja", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Dado ");
+testRunner.Given("Que um visitante esta acessando o site da loja", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Dado ");
 #line hidden
 #line 8
 testRunner.When("Ele clicar em login", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Quando ");

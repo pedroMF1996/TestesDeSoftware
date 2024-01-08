@@ -4,7 +4,7 @@
 	Para que eu possa acessar as demais funcionalidades
 
 Cenário: Realizar login com sucesso
-Dado Que um usuario esta acessando o site da loja
+Dado Que um visitante esta acessando o site da loja
 Quando Ele clicar em login
 E Preencher os dados do formulario com uma senha sem caracteres especiais
 	| Dados					|
