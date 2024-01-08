@@ -62,7 +62,7 @@
             // Arrange
             var command = new AdicionarItemPedidoCommand(_clienteId, _produtoId, "Item Teste", 2, 100);
             
-            _pedido.AdicionarItem(new(command.PedidoItemId, command.NomePedidoItem, command.QuantidadePedidoItem, command.ValorUnitarioPedidoItem));
+            _pedido.AdicionarItem(new(_produtoId, command.NomePedidoItem, command.QuantidadePedidoItem, command.ValorUnitarioPedidoItem));
             
             pedidoRepository.Setup(r => r.ObterPedidoRascunhoPorClienteId(command.ClienteId)).Returns(Task.FromResult(_pedido));
 

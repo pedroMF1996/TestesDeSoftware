@@ -13,5 +13,9 @@ namespace Nerdstore.Core.Messages
         public Event() : base(nameof(Event), Guid.NewGuid())
         {
         }
+        
+        public Event(Guid aggregateId) : base(nameof(Event), Guid.NewGuid())
+        {
+        }
     }
 }

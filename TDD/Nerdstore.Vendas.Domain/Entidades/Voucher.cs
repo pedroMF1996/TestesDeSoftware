@@ -1,11 +1,13 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
+using Nerdstore.Core.DomainObjects;
 
 
 namespace Nerdstore.Vendas.Domain.Entidades
 {
-    public class Voucher
+    public class Voucher : Entity
     {
+        protected Voucher() { }
         public Voucher(string codigo, 
                        decimal? valorDesconto, 
                        decimal? percentualDesconto, 
@@ -21,6 +23,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
             TipoDesconto = tipoDesconto;
             Quantidade = quantitade;
             DataValidade = dataValidade;
+            DataCriacao = DateTime.Now;
             Ativo = ativo;
             Utilizado = utilizado;
         }
@@ -31,10 +34,17 @@ namespace Nerdstore.Vendas.Domain.Entidades
         public TipoDesconto TipoDesconto { get; private set; }
         public int Quantidade { get; private set; }
         public DateTime DataValidade { get; private set; }
+        public DateTime DataCriacao { get; private set; }
+        public DateTime? DataUtilizacao { get; private set; }
         public bool Ativo { get; private set; }
         public bool Utilizado { get; private set; }
-        
 
+        // EF Rel.
+        public ICollection<Pedido> Pedidos { get; set; }
+        public void AplicarVoucher()
+        {
+            DataUtilizacao = DateTime.Now;
+        }
         public ValidationResult ValidarSeAplicavel()
         {
             return new VoucherAplicavelValidation().Validate(this);

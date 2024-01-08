@@ -21,14 +21,30 @@ namespace Nerdstore.Core.Messages
             ValidationResult.Errors.Add(new ValidationFailure(nameof(CommandHandler), msg));
         }
 
+        protected void AdicionarErros(ValidationResult validationResult) 
+        {
+            validationResult.Errors.Select(e => e.ErrorMessage).ToList().ForEach(AddErro);
+        }
+
         protected async Task<ValidationResult> LancarErrosDeValidacao(Command message, CancellationToken cancellationToken)
         {
-            foreach (var erro in message.ValidationResult.Errors.Select(e => e.ErrorMessage))
-            {
-                await _mediator.Publish(new DomainNotification(message.MessageType, erro), cancellationToken);
-            }
+            AdicionarErros(message.ValidationResult);
+            return await LancarErros(message.MessageType, cancellationToken);
+        }
+        
+        protected async Task<ValidationResult> LancarErrosDeValidacao(string origin, ValidationResult validationResult, CancellationToken cancellationToken)
+        {
+            AdicionarErros(validationResult);
+            return await LancarErros(origin, cancellationToken);
+        }
 
-            return message.ValidationResult;
+        protected async Task<ValidationResult> LancarErros(string origin, CancellationToken cancellationToken)
+        {
+            foreach (var erro in ValidationResult.Errors.Select(e => e.ErrorMessage))
+            {
+                await _mediator.Publish(new DomainNotification(origin, erro), cancellationToken);
+            }
+            return ValidationResult;
         }
 
         protected async Task<ValidationResult> Commit<T>(IRepository<T> repository) where T : IAggregateRoot

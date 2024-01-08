@@ -43,7 +43,7 @@ namespace Nerdstore.Vendas.Domain.Testes
             // Assert
             Assert.Equal(300,pedido.ValorTotal);
             Assert.Equal(1, pedido.PedidoItems.Count);
-            Assert.Equal(3, pedido.PedidoItems.FirstOrDefault(i => i.Id == pedidoItem.Id).Quantidade);
+            Assert.Equal(3, pedido.PedidoItems.FirstOrDefault(i => i.ProdutoId == pedidoItem.ProdutoId).Quantidade);
         }
 
         [Fact(DisplayName = "Adicionar Item Pedido Acima do Permitido")]
