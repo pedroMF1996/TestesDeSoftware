@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
@@ -13,7 +11,7 @@ namespace NerdStore.BDD.Tests.Config
         public readonly ConfigurationHelper ConfigurationHelper;
         public WebDriverWait Wait;
 
-        public SeleniumHelper(Browser browser, bool headless, ConfigurationHelper configurationHelper)
+        public SeleniumHelper(Browser browser, ConfigurationHelper configurationHelper, bool headless = false)
         {
             WebDriver = WebDriverFactory.CreateWebDriver(browser, headless);
             ConfigurationHelper = configurationHelper;
@@ -31,7 +29,7 @@ namespace NerdStore.BDD.Tests.Config
 
         public void ClicarNoLinkPorTexto(string linkText)
         {
-            Wait.Until(ExpectedConditions.ElementIsVisible(By.LinkText(linkText))).Click();
+            Wait.Until(ExpectedConditions.ElementIsVisible(By.PartialLinkText(linkText))).Click();
         }
 
         public bool ValidarConteudoUrl(string conteudo)
@@ -41,7 +39,7 @@ namespace NerdStore.BDD.Tests.Config
             
         public void ClicarBotaoPorId(string botaoId)
         {
-            var botao = Wait.Until(ExpectedConditions.ElementIsVisible(By.Id(botaoId)));
+            var botao = ObterElementoPorId(botaoId);
             botao.Click();
         }
 
@@ -138,55 +136,6 @@ namespace NerdStore.BDD.Tests.Config
         {
             WebDriver.Quit();
             WebDriver.Dispose();
-        }
-    }
-
-    public class ConfigurationHelper
-    {
-        private readonly IConfiguration _config;
-        public string Vitrine => _config?.GetSection("Vitrine")?.Value;
-        public string DomainUrl => _config?.GetSection("DomainUrl")?.Value;
-        public string FolderPicture => _config?.GetSection("FolderPicture")?.Value;
-        public string ProdutoUrl => $"{DomainUrl}{_config.GetSection("ProdutoUrl").Value}";
-        public string CarrinhoUrl => $"{DomainUrl}{_config.GetSection("CarrinhoUrl").Value}";
-        public string RegisterUrl => $"{DomainUrl}{_config.GetSection("RegisterUrl").Value}";
-        public string LoginUrl => $"{DomainUrl}{_config.GetSection("LoginUrl").Value}";
-
-        
-        public ConfigurationHelper()
-        {
-            _config = new ConfigurationBuilder()
-                            .AddJsonFile("appsettings.json")
-                            .Build();
-        }
-    }
-
-    public enum Browser
-    {
-        Chrome
-    }
-
-    public static class WebDriverFactory
-    {
-        public static IWebDriver CreateWebDriver(Browser browser, bool headless)
-        {
-            IWebDriver driver = null;
-
-            switch (browser)
-            {
-                case Browser.Chrome:
-                    var optionsChrome = new ChromeOptions();
-                    
-                    if (headless)
-                        optionsChrome.AddArgument("--headless");
-
-                    driver = new ChromeDriver(optionsChrome);
-                    break;
-                default:
-                    break;
-            }
-
-            return driver;
         }
     }
 }
