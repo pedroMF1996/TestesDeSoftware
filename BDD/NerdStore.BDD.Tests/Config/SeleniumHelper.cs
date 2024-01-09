@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.Extensions;
 using OpenQA.Selenium.Support.UI;
 using ExpectedConditions = SeleniumExtras.WaitHelpers.ExpectedConditions;
 
@@ -28,22 +29,130 @@ namespace NerdStore.BDD.Tests.Config
             WebDriver.Navigate().GoToUrl(url);
         }
 
-        public void ClicarLinkPorTexto(string linkText)
+        public void ClicarNoLinkPorTexto(string linkText)
         {
             Wait.Until(ExpectedConditions.ElementIsVisible(By.LinkText(linkText))).Click();
-        }        
+        }
+
+        public bool ValidarConteudoUrl(string conteudo)
+        {
+            return Wait.Until(ExpectedConditions.UrlContains(conteudo));
+        }
+            
+        public void ClicarBotaoPorId(string botaoId)
+        {
+            var botao = Wait.Until(ExpectedConditions.ElementIsVisible(By.Id(botaoId)));
+            botao.Click();
+        }
+
+        public void ClicarPorXPath(string xpath)
+        {
+            var elemento = Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(xpath)));
+            elemento.Click();
+        }
+
+        public IWebElement ObterElementoPorClasse(string classe)
+        {
+            return Wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName(classe)));
+        }
+        
+        public IWebElement ObterElementoPorXPath(string xpath)
+        {
+            return Wait.Until(ExpectedConditions.ElementIsVisible(By.XPath(xpath)));
+        }
+        
+        public IWebElement ObterElementoPorId(string id)
+        {
+            return Wait.Until(ExpectedConditions.ElementIsVisible(By.Id(id)));
+        }
+
+        public void PreencherTextBoxPorId(string id, string valorCampo)
+        {
+            var elemento = ObterElementoPorId(id); 
+            elemento.SendKeys(valorCampo);
+        }
+        
+        public void PreencherDropDownPorId(string id, string valorCampo)
+        {
+            var elemento = new SelectElement(ObterElementoPorId(id)); 
+            elemento.SelectByValue(valorCampo);
+        }
+
+        public string ObterTextoElementoPorClasseCSS(string classeCss)
+        {
+            return ObterElementoPorClasse(classeCss).Text;
+        }
+        
+        public string ObterTextoElementoPorId(string id)
+        {
+            return ObterElementoPorId(id).Text;
+        }
+        
+        public string ObterValorTextBoxPorId(string id)
+        {
+            return ObterElementoPorId(id).GetAttribute("value");
+        }
+
+        public IEnumerable<IWebElement> ObterListaPorClasse(string classe)
+        {
+            return Wait.Until(ExpectedConditions.PresenceOfAllElementsLocatedBy(By.ClassName(classe)));
+        }
+
+        public bool ValidarSeOElementoExiste(string id)
+        {
+            return ElementoExistente(By.Id(id));
+        }
+
+        public void VoltarNavegacao(int vezes = 1)
+        {
+            for (int i = 0; i < vezes; i++)
+            {
+                WebDriver.Navigate().Back();
+            }
+        }
+
+        public void ObterScreenShot(string nome)
+        {
+            SalvarScreenShot(WebDriver.TakeScreenshot(), string.Format("(0)_" + nome + ".png", DateTime.Now.ToFileTime()));
+        }
+
+        private void SalvarScreenShot(Screenshot screenshot, string fileName)
+        {
+            screenshot.SaveAsFile($"{ConfigurationHelper.FolderPicture}/{fileName}");
+        }
+
+        private bool ElementoExistente(By by)
+        {
+            try
+            {
+                WebDriver.FindElement(by);
+                return true;
+            }
+            catch (NoSuchElementException)
+            {
+                return false;
+            }
+        }
 
         public void Dispose()
         {
+            WebDriver.Quit();
             WebDriver.Dispose();
         }
-
     }
 
     public class ConfigurationHelper
     {
         private readonly IConfiguration _config;
+        public string Vitrine => _config?.GetSection("Vitrine")?.Value;
+        public string DomainUrl => _config?.GetSection("DomainUrl")?.Value;
+        public string FolderPicture => _config?.GetSection("FolderPicture")?.Value;
+        public string ProdutoUrl => $"{DomainUrl}{_config.GetSection("ProdutoUrl").Value}";
+        public string CarrinhoUrl => $"{DomainUrl}{_config.GetSection("CarrinhoUrl").Value}";
+        public string RegisterUrl => $"{DomainUrl}{_config.GetSection("RegisterUrl").Value}";
+        public string LoginUrl => $"{DomainUrl}{_config.GetSection("LoginUrl").Value}";
 
+        
         public ConfigurationHelper()
         {
             _config = new ConfigurationBuilder()
