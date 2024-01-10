@@ -35,5 +35,17 @@ namespace NerdStore.BDD.Tests.Usuario
         {
             Helper.ClicarBotaoPorId("login-submit");
         }
+
+        public bool Login(UsuarioModel usuario)
+        {
+            AcessarSiteLoja();
+            ClicarNoLogin();
+            PreencherUsuarioESenha(usuario);
+            if(!ValidarPreenchimentoFormularioLogin(usuario)) return false;
+            ClicarNoBotaoDeLogin();
+            if(!ValidarSaudacaoUsuario(usuario)) return false;
+
+            return true;
+        }
     }
 }
