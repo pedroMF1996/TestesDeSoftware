@@ -1,5 +1,7 @@
 using Bogus;
 using NerdStore.BDD.Tests.Config;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using TechTalk.SpecFlow;
 using Xunit;
 
@@ -60,22 +62,53 @@ namespace NerdStore.BDD.Tests.Usuario
         public void WhenPreencherOsDadosDoFormularioComUmaSenhaSemMaiusculas(Table table)
         {
             //Arrange
+            _fixture.GerarDadosDoUsuario();
+            var usuario = _fixture.Usuario;
+            usuario.Senha = "teste@123";
 
             //Act
+            _cadastroDeUsuarioTela.PreencherFormularioRegistro(usuario);
 
             //Assert
-
+            Assert.True(_cadastroDeUsuarioTela.ValidarPreenchimentoFormularioRegistro(usuario));
         }
 
         [When(@"Preencher os dados do formulario com uma senha sem caracteres especiais")]
         public void WhenPreencherOsDadosDoFormularioComUmaSenhaSemCaracteresEspeciais(Table table)
         {
             //Arrange
+            _fixture.GerarDadosDoUsuario();
+            var usuario = _fixture.Usuario;
+            usuario.Senha = "Teste123";
+
+            //Act
+            _cadastroDeUsuarioTela.PreencherFormularioRegistro(usuario);
+
+            //Assert
+            Assert.True(_cadastroDeUsuarioTela.ValidarPreenchimentoFormularioRegistro(usuario));
+        }
+
+        [Then(@"Ele recebera uma mensagem de erro que a senha precisa conter pelo menos uma letra maiuscula")]
+        public void ThenEleReceberaUmaMensagemDeErroQueASenhaPrecisaConterPeloMenosUmaLetraMaiuscula()
+        {
+            //Arrange
 
             //Act
 
             //Assert
+            
+            Assert.True(_cadastroDeUsuarioTela.ValidarMensagemDeErro("Passwords must have at least one uppercase ('A'-'Z')."));
+        }
 
+        [Then(@"Ele recebera uma mensagem de erro que a senha precisa conter pelo menos um caracter especial")]
+        public void ThenEleReceberaUmaMensagemDeErroQueASenhaPrecisaConterPeloMenosUmCaracterEspecial()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
+            Assert.True(_cadastroDeUsuarioTela.ValidarMensagemDeErro("Passwords must have at least one non alphanumeric character."));
         }
     }
 }

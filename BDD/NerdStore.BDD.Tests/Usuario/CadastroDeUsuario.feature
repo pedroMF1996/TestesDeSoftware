@@ -24,8 +24,7 @@ E Preencher os dados do formulario com uma senha sem maiusculas
 	| Senha					|
 	| Confirmacao da Senha	|
 E Clicar no botao registrar
-Então Ele sera redirecionado para a vitrine
-E Uma saudacao com seu e-mail sera exibida no menu superior
+Então Ele recebera uma mensagem de erro que a senha precisa conter pelo menos uma letra maiuscula
 
 Cenário: Cadastro com senha sem caractee especial
 Dado Que um visitante esta acessando o site da loja
@@ -36,5 +35,4 @@ E Preencher os dados do formulario com uma senha sem caracteres especiais
 	| Senha					|
 	| Confirmacao da Senha	|
 E Clicar no botao registrar
-Então Ele sera redirecionado para a vitrine
-E Uma saudacao com seu e-mail sera exibida no menu superior
+Então Ele recebera uma mensagem de erro que a senha precisa conter pelo menos um caracter especial
