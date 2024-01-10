@@ -19,7 +19,7 @@ namespace NerdStore.BDD.Tests.Config
         public AutomacaoWebFixture()
         {
             Configuration = new ConfigurationHelper();
-            BrowserHelper = new SeleniumHelper(Browser.Chrome, Configuration);
+            BrowserHelper = new SeleniumHelper(Browser.Chrome, Configuration, true);
             usuarioFaker = new Faker<UsuarioModel>();
 
         }
