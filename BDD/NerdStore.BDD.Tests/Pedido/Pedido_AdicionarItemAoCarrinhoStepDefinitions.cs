@@ -1,4 +1,5 @@
 using NerdStore.BDD.Tests.Config;
+using NerdStore.BDD.Tests.Usuario;
 using TechTalk.SpecFlow;
 using Xunit;
 
@@ -10,13 +11,25 @@ namespace NerdStore.BDD.Tests.Pedido
     {
         private readonly AutomacaoWebFixture _fixture;
         private readonly PedidoTela _pedidoTela;
+        private readonly LoginDeUsuarioTela _loginDeUsuarioTela;
         private string urlProduto;
         public Pedido_AdicionarItemAoCarrinhoStepDefinitions(AutomacaoWebFixture fixture)
         {
             _fixture = fixture;
             _pedidoTela = new PedidoTela(_fixture.BrowserHelper);
+            _loginDeUsuarioTela = new LoginDeUsuarioTela(_fixture.BrowserHelper);
         }
 
+        [Given(@"O usuario esteja logado")]
+        public void GivenOUsuarioEstejaLogado()
+        {
+            //Arrange
+            var usuario = new UsuarioModel() { Email = "teste@teste.com", Senha = "Teste@123" };
+
+            //Act & Assert
+            Assert.True(_loginDeUsuarioTela.Login(usuario));
+        }
+        
         [Given(@"Que um produto esteja na vitrine")]
         public void GivenQueUmProdutoEstejaNaVitrine()
         {
@@ -39,16 +52,7 @@ namespace NerdStore.BDD.Tests.Pedido
             //Act
 
             //Assert
-        }
-
-        [Given(@"O usuario esteja logado")]
-        public void GivenOUsuarioEstejaLogado()
-        {
-            //Arrange
-
-            //Act
-
-            //Assert
+            Assert.True(_pedidoTela.ObterQuantidadeEmEstoque() > 0);
         }
 
         [When(@"O usuario adicionar uma unidade ao carrinho")]
@@ -57,10 +61,11 @@ namespace NerdStore.BDD.Tests.Pedido
             //Arrange
 
             //Act
+            _pedidoTela.ClicarEmComprarAgora();
 
             //Assert
         }
-
+         
         [Then(@"O usuario sera redirecionado ao resumo da compra")]
         public void ThenOUsuarioSeraRedirecionadoAoResumoDaCompra()
         {
@@ -69,6 +74,7 @@ namespace NerdStore.BDD.Tests.Pedido
             //Act
 
             //Assert
+            Assert.True(_pedidoTela.ValidarSeEstaNoCarrinhoDeCompra());
         }
 
         [Then(@"O Valor Total Do Pedido Sera Exatamente O Valor do Item Adicionado")]

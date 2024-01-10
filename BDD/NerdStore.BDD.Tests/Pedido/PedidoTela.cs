@@ -23,5 +23,29 @@ namespace NerdStore.BDD.Tests.Pedido
         {
             return Helper.ValidarConteudoUrl(Helper.Configuration.ProdutoUrl);
         }
+
+        public int ObterQuantidadeEmEstoque()
+        {
+            var caminnho = "/html/body/div/main/div/div/div[2]/p[1]";
+            var elemento = Helper.ObterElementoPorXPath(caminnho);
+            var quantidade = elemento.Text.ApenasNumeros();
+
+            if (char.IsDigit(quantidade.ToString(), 0)) return quantidade;
+
+            return 0;
+        }
+
+        public void ClicarEmComprarAgora()
+        {
+            var caminho = "/html/body/div/main/div/div/div[2]/form/div[2]/button";
+            Helper.ClicarPorXPath(caminho);
+        }
+
+        public bool ValidarSeEstaNoCarrinhoDeCompra()
+        {
+            return Helper.ValidarConteudoUrl(Helper.Configuration.CarrinhoUrl);
+        }
+
+
     }
 }
