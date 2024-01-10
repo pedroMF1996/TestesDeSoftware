@@ -8,13 +8,13 @@ namespace NerdStore.BDD.Tests.Config
     public class SeleniumHelper : IDisposable
     {
         public IWebDriver WebDriver;
-        public readonly ConfigurationHelper ConfigurationHelper;
+        public readonly ConfigurationHelper Configuration;
         public WebDriverWait Wait;
 
         public SeleniumHelper(Browser browser, ConfigurationHelper configurationHelper, bool headless = false)
         {
             WebDriver = WebDriverFactory.CreateWebDriver(browser, headless);
-            ConfigurationHelper = configurationHelper;
+            Configuration = configurationHelper;
             WebDriver.Manage().Window.Maximize();
             Wait = new WebDriverWait(WebDriver, TimeSpan.FromSeconds(30));
         }
@@ -116,7 +116,7 @@ namespace NerdStore.BDD.Tests.Config
 
         private void SalvarScreenShot(Screenshot screenshot, string fileName)
         {
-            screenshot.SaveAsFile($"{ConfigurationHelper.FolderPicture}/{fileName}");
+            screenshot.SaveAsFile($"{Configuration.FolderPicture}/{fileName}");
         }
 
         private bool ElementoExistente(By by)

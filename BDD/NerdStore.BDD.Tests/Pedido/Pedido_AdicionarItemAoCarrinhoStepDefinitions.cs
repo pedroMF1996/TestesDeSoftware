@@ -1,6 +1,4 @@
 using NerdStore.BDD.Tests.Config;
-using OpenQA.Selenium.Chrome;
-using System;
 using TechTalk.SpecFlow;
 using Xunit;
 
@@ -11,22 +9,26 @@ namespace NerdStore.BDD.Tests.Pedido
     public class Pedido_AdicionarItemAoCarrinhoStepDefinitions : IClassFixture<AutomacaoWebFixture>
     {
         private readonly AutomacaoWebFixture _fixture;
-
+        private readonly PedidoTela _pedidoTela;
+        private string urlProduto;
         public Pedido_AdicionarItemAoCarrinhoStepDefinitions(AutomacaoWebFixture fixture)
         {
             _fixture = fixture;
+            _pedidoTela = new PedidoTela(_fixture.BrowserHelper);
         }
 
         [Given(@"Que um produto esteja na vitrine")]
         public void GivenQueUmProdutoEstejaNaVitrine()
         {
             //Arrange
-            
-            _fixture.BrowserHelper.IrParaUrl("https://desenvolvedor.io");
+            _pedidoTela.AcessarVitrineDeProdutos();
             
             //Act
+            _pedidoTela.ObterDetalhesDoProduto(2);
+            urlProduto = _pedidoTela.ObterUrl();
 
             //Assert
+            Assert.True(_pedidoTela.ValidarProdutoDisponivel());
         }
 
         [Given(@"E esteja disponivel no estoque")]
