@@ -6,5 +6,10 @@
         {
             return Convert.ToInt32(value.Where(char.IsDigit).ToArray());
         }
+
+        public static string LimparValor(this string valor)
+        {
+            return valor.Replace('$', ' ').Trim();
+        }
     }
 }

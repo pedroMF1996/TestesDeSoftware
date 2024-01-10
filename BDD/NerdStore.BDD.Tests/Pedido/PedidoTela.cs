@@ -46,6 +46,16 @@ namespace NerdStore.BDD.Tests.Pedido
             return Helper.ValidarConteudoUrl(Helper.Configuration.CarrinhoUrl);
         }
 
+        public decimal ObterValorUnitarioProdutoCarrinho()
+        {
+            return Convert.ToDecimal(Helper.ObterTextoElementoPorId("valorUnitario").LimparValor());
+        }
 
+        public decimal ObterValorTotalCarrinho()
+        {
+            return Convert.ToDecimal(Helper.ObterTextoElementoPorId("valorTotalCarrinho").LimparValor());
+        }
+
+        
     }
 }
