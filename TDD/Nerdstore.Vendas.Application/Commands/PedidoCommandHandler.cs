@@ -147,9 +147,9 @@ namespace Nerdstore.Vendas.Application.Commands
 
         private Pedido PedidoExistente(Pedido pedido, PedidoItem pedidoItem)
         {
-            if (pedido.ExistePedidoItem(pedidoItem.ProdutoId) is PedidoItem pedidoItemExistente)
+            if (pedido.ExistePedidoItem(pedidoItem.Id) is PedidoItem pedidoItemExistente)
             {
-                pedidoItemExistente.AlterarQuantidade(pedidoItem.Quantidade);
+                pedido.AtualizarUnidades(pedidoItemExistente, pedidoItem.Quantidade);
                 _repository.AtualizarItem(pedidoItemExistente);
             }
             else

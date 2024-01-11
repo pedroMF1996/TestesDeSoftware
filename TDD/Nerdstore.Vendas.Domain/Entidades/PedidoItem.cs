@@ -24,19 +24,10 @@ namespace Nerdstore.Vendas.Domain.Entidades
             ValorUnitario = valor;
         }
 
-        public void AssociarPedido(Guid pedidoId)
-        {
-            PedidoId = pedidoId;
-        }
-
+        
         public void AdicionaQuantidade(int quantidade)
         {
             Quantidade += quantidade;
-        }
-        
-        public void AlterarQuantidade(int quantidade)
-        {
-            Quantidade = quantidade;
         }
 
         public void RecuperarId(Guid id)

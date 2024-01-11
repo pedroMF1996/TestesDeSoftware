@@ -35,10 +35,21 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
             TratarNumeroMaximoItemPedido(pedidoItem);
 
-            pedidoItem.AssociarPedido(Id);
             _pedidoItems.Add(pedidoItem);
 
             CalcularValorPedido();
+        }
+
+        public void AtualizarUnidades(PedidoItem pedidoItem, int quantidade)
+        {
+            pedidoItem.AdicionaQuantidade(quantidade);
+            TratarNumeroMaximoItemPedido(pedidoItem);
+
+            AtualizarQuantidadePedidoItemExistente(ref pedidoItem);
+
+            TratarNumeroMaximoItemPedido(pedidoItem);
+            
+            _pedidoItems.Add(pedidoItem);
         }
 
         public void AtualizarItem(PedidoItem pedidoItem)
@@ -48,10 +59,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
             var pedidoItemExistente = ExistePedidoItem(pedidoItem.Id);
 
-            _pedidoItems.Remove(pedidoItemExistente);
-
-            pedidoItem.AssociarPedido(Id);
-            
+            _pedidoItems.Remove(pedidoItemExistente);            
             _pedidoItems.Add(pedidoItem);
 
             CalcularValorPedido();
@@ -151,15 +159,6 @@ namespace Nerdstore.Vendas.Domain.Entidades
         private bool VerificaValorDescontoMaiorQueValorTotal()
         {
             return Voucher.ValorDesconto.HasValue && Voucher.ValorDesconto.Value > ValorTotal;
-        }
-
-        public void AtualizarUnidades(PedidoItem pedidoItem, int quantidade)
-        {
-            pedidoItem.AdicionaQuantidade(quantidade);
-            TratarNumeroMaximoItemPedido(pedidoItem);
-
-            AtualizarQuantidadePedidoItemExistente(ref pedidoItem);
-            AtualizarItem(pedidoItem);
         }
 
         public static class PedidoFactory
