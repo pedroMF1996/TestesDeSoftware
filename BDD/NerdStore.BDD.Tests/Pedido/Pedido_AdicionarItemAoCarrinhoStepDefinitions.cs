@@ -112,7 +112,7 @@ namespace NerdStore.BDD.Tests.Pedido
             //Act
 
             //Assert
-            Assert.True(_pedidoTela.ObterMensagemDeErro().Contains("Produto com estoque insuficiente"));
+            Assert.Contains($"A quantidade máxima de um item é {PedidoEntidade.MAX_UNIDADES_ITEM}", _pedidoTela.ObterMensagemDeErro());
         }
 
         [Given(@"O mesmo produto ja tenha sido adicionado no carrinho anteriormente")]
