@@ -11,7 +11,7 @@ namespace NerdStore.BDD.Tests.Config
 
         public static string LimparValor(this string valor)
         {
-            return valor.Replace('$', ' ').Trim();
+            return valor.Replace('$', ' ').Replace(',', ' ').Trim();
         }
     }
 }
