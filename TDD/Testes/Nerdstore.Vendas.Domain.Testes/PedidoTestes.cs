@@ -73,7 +73,7 @@ namespace Nerdstore.Vendas.Domain.Testes
             var pedidoItem2 = new PedidoItem(produtoId, "Livro Caro", 1, 100);
 
             // Act &  Assert
-            Assert.Throws<DomainException>(() => pedido.AdicionarItem(pedidoItem2));
+            Assert.Throws<DomainException>(() => pedido.AtualizarUnidades(pedidoItem, pedidoItem2.Quantidade));
 
         }
 

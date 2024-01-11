@@ -38,8 +38,6 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         public void AtualizarUnidades(PedidoItem pedidoItem, int quantidade)
         {
-            TratarNumeroMaximoItemPedido(pedidoItem);
-
             AtualizarQuantidadePedidoItemExistente(ref pedidoItem, quantidade);
 
             TratarNumeroMaximoItemPedido(pedidoItem);
@@ -88,10 +86,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         private void TratarNumeroMaximoItemPedido(PedidoItem pedidoItem)
         {
-            if (ExistePedidoItem(pedidoItem.Id) is PedidoItem pedidoExistente 
-                    && ( pedidoExistente.Quantidade > MAX_UNIDADES_ITEM || pedidoExistente.Quantidade + pedidoItem.Quantidade > MAX_UNIDADES_ITEM)
-                    || pedidoItem.Quantidade > MAX_UNIDADES_ITEM)
-                throw new DomainException($"Maximo de {MAX_UNIDADES_ITEM} unidades por produto");
+            if (pedidoItem.Quantidade > MAX_UNIDADES_ITEM) throw new DomainException($"Maximo de {MAX_UNIDADES_ITEM} unidades por produto");
         }
 
         private void CalcularValorPedido()
