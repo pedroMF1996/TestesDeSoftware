@@ -170,15 +170,5 @@ namespace NerdStore.BDD.Tests.Pedido
 
             //Assert
         }
-
-        [Then(@"Recebera uma mensagem de erro mencionando que foi ultrapassada a quantidade limite maximo")]
-        public void ThenReceberaUmaMensagemDeErroMencionandoQueFoiUltrapassadaAQuantidadeLimiteMaximo()
-        {
-            //Arrange
-
-            //Act
-
-            //Assert
-        }
     }
 }

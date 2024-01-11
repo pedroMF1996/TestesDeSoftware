@@ -34,5 +34,4 @@ E Que um produto esteja na vitrine
 E E esteja disponivel no estoque
 E O mesmo produto ja tenha sido adicionado no carrinho anteriormente
 Quando O usuario adicionar a quantidade maxima permitida ao carrinho
-Então O usuario sera redirecionado ao resumo da compra
-E Recebera uma mensagem de erro mencionando que foi ultrapassada a quantidade limite maximo
+Então Recebera uma mensagem de erro mencionando que foi ultrapassado a quantidade limite

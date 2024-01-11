@@ -240,11 +240,8 @@ testRunner.And("O mesmo produto ja tenha sido adicionado no carrinho anteriormen
 testRunner.When("O usuario adicionar a quantidade maxima permitida ao carrinho", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Quando ");
 #line hidden
 #line 37
-testRunner.Then("O usuario sera redirecionado ao resumo da compra", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Então ");
-#line hidden
-#line 38
-testRunner.And("Recebera uma mensagem de erro mencionando que foi ultrapassada a quantidade limit" +
-                        "e maximo", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "E ");
+testRunner.Then("Recebera uma mensagem de erro mencionando que foi ultrapassado a quantidade limit" +
+                        "e", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Então ");
 #line hidden
             }
             this.ScenarioCleanup();
