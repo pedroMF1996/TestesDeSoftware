@@ -23,16 +23,10 @@ namespace Nerdstore.Vendas.Domain.Entidades
             Quantidade = quantidade;
             ValorUnitario = valor;
         }
-
         
         public void AdicionaQuantidade(int quantidade)
         {
             Quantidade += quantidade;
-        }
-
-        public void RecuperarId(Guid id)
-        {
-            Id = id;
         }
 
         public decimal CalcularValor()
