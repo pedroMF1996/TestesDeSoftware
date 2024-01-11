@@ -21,7 +21,6 @@ namespace NerdStore.BDD.Tests.Config
             Configuration = new ConfigurationHelper();
             BrowserHelper = new SeleniumHelper(Browser.Chrome, Configuration);
             usuarioFaker = new Faker<UsuarioModel>();
-
         }
 
         public void GerarDadosDoUsuario()

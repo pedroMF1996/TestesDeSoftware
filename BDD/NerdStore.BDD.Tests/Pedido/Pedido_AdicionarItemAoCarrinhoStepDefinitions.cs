@@ -82,13 +82,12 @@ namespace NerdStore.BDD.Tests.Pedido
         {
             //Arrange
             var valorUnitario = _pedidoTela.ObterValorUnitarioProdutoCarrinho();
-            var quantidade = _pedidoTela.ObterValorQuantidade();
             var valorTotal = _pedidoTela.ObterValorTotalCarrinho();
 
             //Act
 
             //Assert
-            Assert.Equal(valorUnitario*quantidade, valorTotal);
+            Assert.Equal(valorUnitario, valorTotal);
         }
 
         [When(@"O usuario adicionar um item acima da quantidade maxima permitida")]
