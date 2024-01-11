@@ -12,9 +12,9 @@ Então O usuario sera redirecionado ao resumo da compra
 E O Valor Total Do Pedido Sera Exatamente O Valor do Item Adicionado
 
 Cenário: Adicionar Itens acima do limite
-Dado Que um produto esteja na vitrine 
+Dado O usuario esteja logado 
+E Que um produto esteja na vitrine
 E E esteja disponivel no estoque
-E O usuario esteja logado
 Quando O usuario adicionar um item acima da quantidade maxima permitida
 Então Recebera uma mensagem de erro mencionando que foi ultrapassado a quantidade limite
 

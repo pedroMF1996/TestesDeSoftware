@@ -60,5 +60,20 @@ namespace NerdStore.BDD.Tests.Pedido
             return Convert.ToDecimal(Helper.ObterValorTextBoxPorId("quantidade").LimparValor());
         }
 
+        public void ClicarEmAdicionarQuantidadeItens(int quantidade)
+        {
+            var botaoAdicionar = Helper.ObterElementoPorClasse("btn-plus");
+            if (botaoAdicionar == null) { return; }
+
+            for (int i = 0; i < quantidade; i++)
+            {
+                botaoAdicionar.Click();
+            }
+        }
+
+        internal string ObterMensagemDeErro()
+        {
+            return Helper.ObterTextoElementoPorClasseCSS("alert-danger");
+        }
     }
 }

@@ -2,6 +2,7 @@ using NerdStore.BDD.Tests.Config;
 using NerdStore.BDD.Tests.Usuario;
 using TechTalk.SpecFlow;
 using Xunit;
+using PedidoEntidade = Nerdstore.Vendas.Domain.Entidades.Pedido;
 
 namespace NerdStore.BDD.Tests.Pedido
 {
@@ -94,10 +95,12 @@ namespace NerdStore.BDD.Tests.Pedido
         public void WhenOUsuarioAdicionarUmItemAcimaDaQuantidadeMaximaPermitida()
         {
             //Arrange
+            _pedidoTela.ClicarEmAdicionarQuantidadeItens(PedidoEntidade.MAX_UNIDADES_ITEM + 1);
 
             //Act
 
             //Assert
+            _pedidoTela.ClicarEmComprarAgora();
         }
 
         [Then(@"Recebera uma mensagem de erro mencionando que foi ultrapassado a quantidade limite")]
@@ -108,6 +111,7 @@ namespace NerdStore.BDD.Tests.Pedido
             //Act
 
             //Assert
+            Assert.True(_pedidoTela.ObterMensagemDeErro().Contains("Produto com estoque insuficiente"));
         }
 
         [Given(@"O mesmo produto ja tenha sido adicionado no carrinho anteriormente")]
