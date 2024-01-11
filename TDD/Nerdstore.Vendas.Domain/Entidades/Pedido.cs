@@ -31,7 +31,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
         {
             TratarNumeroMaximoItemPedido(pedidoItem);
 
-            AtualizarQuantidadePedidoItemExistente(ref pedidoItem, pedidoItem.ProdutoId);
+            AtualizarQuantidadePedidoItemExistente(ref pedidoItem);
 
             TratarNumeroMaximoItemPedido(pedidoItem);
 
@@ -46,7 +46,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
             TratarPedidoItemInexistente(pedidoItem);
             TratarNumeroMaximoItemPedido(pedidoItem);
 
-            var pedidoItemExistente = ExistePedidoItem(pedidoItem.ProdutoId);
+            var pedidoItemExistente = ExistePedidoItem(pedidoItem.Id);
 
             _pedidoItems.Remove(pedidoItemExistente);
 
@@ -66,14 +66,14 @@ namespace Nerdstore.Vendas.Domain.Entidades
             CalcularValorPedido();
         }
 
-        public PedidoItem ExistePedidoItem(Guid pedidoItemProdutoId)
+        public PedidoItem ExistePedidoItem(Guid pedidoItemId)
         {
-            return PedidoItems.FirstOrDefault(i => i.ProdutoId == pedidoItemProdutoId);
+            return PedidoItems.FirstOrDefault(i => i.Id == pedidoItemId);
         }
 
-        private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem, Guid pedidoItemProdutoId)
+        private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem)
         {
-            if (ExistePedidoItem(pedidoItemProdutoId) is PedidoItem pedidoItemExistente)
+            if (ExistePedidoItem(pedidoItem.Id) is PedidoItem pedidoItemExistente)
             {
                 _pedidoItems.Remove(pedidoItemExistente);
                 pedidoItemExistente.AdicionaQuantidade(pedidoItem.Quantidade);
@@ -100,7 +100,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         private void TratarPedidoItemInexistente(PedidoItem pedidoItem)
         {
-            if (!_pedidoItems.Any(i => i.ProdutoId == pedidoItem.ProdutoId)) throw new DomainException("Produto inexistente");
+            if (!_pedidoItems.Any(i => i.Id == pedidoItem.Id)) throw new DomainException("Produto inexistente");
         }
 
         public ValidationResult AplicarVoucher(Voucher voucher)
@@ -158,7 +158,7 @@ namespace Nerdstore.Vendas.Domain.Entidades
             pedidoItem.AdicionaQuantidade(quantidade);
             TratarNumeroMaximoItemPedido(pedidoItem);
 
-            AtualizarQuantidadePedidoItemExistente(ref pedidoItem, pedidoItem.ProdutoId);
+            AtualizarQuantidadePedidoItemExistente(ref pedidoItem);
             AtualizarItem(pedidoItem);
         }
 
