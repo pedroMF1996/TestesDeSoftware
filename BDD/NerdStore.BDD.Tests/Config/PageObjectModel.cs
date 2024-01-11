@@ -22,5 +22,10 @@ namespace NerdStore.BDD.Tests.Config
         {
             Helper.IrParaUrl(url);
         }
+
+        public void VoltarNavegacao(int vezes = 1)
+        {
+            Helper.VoltarNavegacao(vezes);
+        }
     }
 }

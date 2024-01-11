@@ -13,7 +13,8 @@ namespace NerdStore.BDD.Tests.Pedido
         private readonly AutomacaoWebFixture _fixture;
         private readonly PedidoTela _pedidoTela;
         private readonly LoginDeUsuarioTela _loginDeUsuarioTela;
-        private string urlProduto;
+        private string _urlProduto;
+        private int _quantidadeInicial;
         public Pedido_AdicionarItemAoCarrinhoStepDefinitions(AutomacaoWebFixture fixture)
         {
             _fixture = fixture;
@@ -39,7 +40,7 @@ namespace NerdStore.BDD.Tests.Pedido
             
             //Act
             _pedidoTela.ObterDetalhesDoProduto(2);
-            urlProduto = _pedidoTela.ObterUrl();
+            _urlProduto = _pedidoTela.ObterUrl();
 
             //Assert
             Assert.True(_pedidoTela.ValidarProdutoDisponivel());
@@ -118,10 +119,19 @@ namespace NerdStore.BDD.Tests.Pedido
         public void GivenOMesmoProdutoJaTenhaSidoAdicionadoNoCarrinhoAnteriormente()
         {
             //Arrange
+            _pedidoTela.NavegarParaCarrinhoDeCompras();
+            _pedidoTela.GarantirQueOPrimeiroItemEstejaAdicionado();
+            var produtoId = _pedidoTela.ObterIdPrimeiroProdutoNoCarrinho();
+            _quantidadeInicial = _pedidoTela.ObterValorQuantidade();
 
             //Act
 
             //Assert
+            Assert.Contains(_urlProduto, produtoId);
+            Assert.True(_pedidoTela.ValidarSeEstaNoCarrinhoDeCompra());
+            Assert.True(_quantidadeInicial > 0);
+
+            _pedidoTela.VoltarNavegacao();
         }
 
         [Then(@"A quantidade de items daquele produto tera sido acrescida em uma unidade a mais")]
@@ -132,16 +142,21 @@ namespace NerdStore.BDD.Tests.Pedido
             //Act
 
             //Assert
+            Assert.True(_pedidoTela.ObterValorQuantidade() == _quantidadeInicial + 1);
         }
 
         [Then(@"O valor total do pedido sera a multiplicacao da quantidade de itens pelo valor unitario")]
         public void ThenOValorTotalDoPedidoSeraAMultiplicacaoDaQuantidadeDeItensPeloValorUnitario()
         {
             //Arrange
+            var valorUnitario = _pedidoTela.ObterValorUnitarioProdutoCarrinho();
+            var valorTotal = _pedidoTela.ObterValorTotalCarrinho();
+            var quantidade = _pedidoTela.ObterValorQuantidade();
 
             //Act
 
             //Assert
+            Assert.Equal(valorUnitario * quantidade, valorTotal);
         }
 
         [When(@"O usuario adicionar a quantidade maxima permitida ao carrinho")]

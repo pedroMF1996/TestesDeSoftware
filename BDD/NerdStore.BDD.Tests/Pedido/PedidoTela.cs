@@ -55,9 +55,9 @@ namespace NerdStore.BDD.Tests.Pedido
             return Convert.ToDecimal(Helper.ObterTextoElementoPorId("valorTotalCarrinho").LimparValor());
         }
 
-        public decimal ObterValorQuantidade()
+        public int ObterValorQuantidade()
         {
-            return Convert.ToDecimal(Helper.ObterValorTextBoxPorId("quantidade").LimparValor());
+            return int.Parse(Helper.ObterValorTextBoxPorId("quantidade").LimparValor());
         }
 
         public void ClicarEmAdicionarQuantidadeItens(int quantidade)
@@ -74,6 +74,26 @@ namespace NerdStore.BDD.Tests.Pedido
         internal string ObterMensagemDeErro()
         {
             return Helper.ObterTextoElementoPorClasseCSS("alert-danger");
+        }
+
+        public void NavegarParaCarrinhoDeCompras()
+        {
+            Helper.ClicarPorXPath("/html/body/header/nav/div/div/ul/li[3]/a");
+        }
+
+        public void GarantirQueOPrimeiroItemEstejaAdicionado()
+        {
+            NavegarParaCarrinhoDeCompras();
+            if (ObterValorTotalCarrinho() > 0) return;
+
+            AcessarVitrineDeProdutos();
+            ObterDetalhesDoProduto();
+            ClicarEmComprarAgora();
+        }
+
+        public string ObterIdPrimeiroProdutoNoCarrinho()
+        {
+            return Helper.ObterElementoPorXPath("/html/body/div/main/div/div/div/table/tbody/tr[1]/td[1]/div/div/h4/a").GetAttribute("href");
         }
     }
 }
