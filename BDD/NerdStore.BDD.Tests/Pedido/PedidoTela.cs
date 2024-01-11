@@ -26,9 +26,8 @@ namespace NerdStore.BDD.Tests.Pedido
 
         public int ObterQuantidadeEmEstoque()
         {
-            var caminnho = "/html/body/div/main/div/div/div[2]/p[1]";
-            var elemento = Helper.ObterElementoPorXPath(caminnho);
-            var quantidade = elemento.Text.ApenasNumeros();
+            var elemento = Helper.ObterTextoElementoPorId("quantidadeEmEstoque");
+            var quantidade = elemento.ApenasNumeros();
 
             if (char.IsDigit(quantidade.ToString(), 0)) return quantidade;
 
@@ -56,6 +55,10 @@ namespace NerdStore.BDD.Tests.Pedido
             return Convert.ToDecimal(Helper.ObterTextoElementoPorId("valorTotalCarrinho").LimparValor());
         }
 
-        
+        public decimal ObterValorQuantidade()
+        {
+            return Convert.ToDecimal(Helper.ObterValorTextBoxPorId("quantidade").LimparValor());
+        }
+
     }
 }
