@@ -51,7 +51,7 @@ namespace Nerdstore.Vendas.Data
 
         public async Task<PedidoItem> ObterItemPorPedido(Guid pedidoId, Guid produtoId)
         {
-            return await _vendasContext.PedidoItems.FirstOrDefaultAsync(p => p.ProdutoId == produtoId && p.Id == pedidoId);
+            return await _vendasContext.PedidoItems.FirstOrDefaultAsync(p => p.ProdutoId == produtoId && p.PedidoId == pedidoId);
         }
 
         public void AdicionarItem(PedidoItem pedidoItem)

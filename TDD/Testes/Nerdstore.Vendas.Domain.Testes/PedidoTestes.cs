@@ -38,12 +38,12 @@ namespace Nerdstore.Vendas.Domain.Testes
             var pedidoItem2 = new PedidoItem(produtoId, "Livro Caro", 1, 100);
 
             // Act
-            pedido.AdicionarItem(pedidoItem2);
+            pedido.AtualizarUnidades(pedidoItem,pedidoItem2.Quantidade);
 
             // Assert
             Assert.Equal(300,pedido.ValorTotal);
             Assert.Equal(1, pedido.PedidoItems.Count);
-            Assert.Equal(3, pedido.PedidoItems.FirstOrDefault(i => i.ProdutoId == pedidoItem.ProdutoId).Quantidade);
+            Assert.Equal(3, pedido.PedidoItems.FirstOrDefault(i => i.Id == pedidoItem.Id).Quantidade);
         }
 
         [Fact(DisplayName = "Adicionar Item Pedido Acima do Permitido")]
@@ -73,7 +73,7 @@ namespace Nerdstore.Vendas.Domain.Testes
             var pedidoItem2 = new PedidoItem(produtoId, "Livro Caro", 1, 100);
 
             // Act &  Assert
-            Assert.Throws<DomainException>(() => pedido.AdicionarItem(pedidoItem2));
+            Assert.Throws<DomainException>(() => pedido.AtualizarUnidades(pedidoItem, pedidoItem2.Quantidade));
 
         }
 

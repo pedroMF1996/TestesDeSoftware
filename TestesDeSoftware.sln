@@ -50,10 +50,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerStore.Integrations.Tests", "TestesDeIntegracao\tests\NerStore.Integrations.Tests\NerStore.Integrations.Tests.csproj", "{2DF76D6D-8514-4D31-A5FF-38D68462ACB6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{36436661-CF9D-4B24-A090-2FFAA628EE06}"
+	ProjectSection(SolutionItems) = preProject
+		TestesDeIntegracao\sql\ScriptInsert.sql = TestesDeIntegracao\sql\ScriptInsert.sql
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04 - BDD", "04 - BDD", "{48E3F1A4-CAB3-4903-A4BA-24D875107D81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NerdStore.BDD.Tests", "BDD\NerdStore.BDD.Tests\NerdStore.BDD.Tests.csproj", "{5D8192FD-1FB9-4F82-902B-4EA2120ADECE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NerdStore.BDD.Tests", "BDD\NerdStore.BDD.Tests\NerdStore.BDD.Tests.csproj", "{5D8192FD-1FB9-4F82-902B-4EA2120ADECE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

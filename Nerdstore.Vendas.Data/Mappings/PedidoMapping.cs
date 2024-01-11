@@ -16,7 +16,7 @@ namespace Nerdstore.Vendas.Data.Mappings
             // 1 : N => Pedido : PedidoItems
             builder.HasMany(c => c.PedidoItems)
                 .WithOne(c => c.Pedido)
-                .HasForeignKey(c => c.Id);
+                .HasForeignKey(c => c.PedidoId);
 
             builder.ToTable("Pedidos");
         }
