@@ -31,10 +31,6 @@ namespace Nerdstore.Vendas.Domain.Entidades
         {
             TratarNumeroMaximoItemPedido(pedidoItem);
 
-            AtualizarQuantidadePedidoItemExistente(ref pedidoItem);
-
-            TratarNumeroMaximoItemPedido(pedidoItem);
-
             _pedidoItems.Add(pedidoItem);
 
             CalcularValorPedido();
@@ -42,14 +38,15 @@ namespace Nerdstore.Vendas.Domain.Entidades
 
         public void AtualizarUnidades(PedidoItem pedidoItem, int quantidade)
         {
-            pedidoItem.AdicionaQuantidade(quantidade);
             TratarNumeroMaximoItemPedido(pedidoItem);
 
-            AtualizarQuantidadePedidoItemExistente(ref pedidoItem);
+            AtualizarQuantidadePedidoItemExistente(ref pedidoItem, quantidade);
 
             TratarNumeroMaximoItemPedido(pedidoItem);
             
             _pedidoItems.Add(pedidoItem);
+
+            CalcularValorPedido();
         }
 
         public void AtualizarItem(PedidoItem pedidoItem)
@@ -79,19 +76,22 @@ namespace Nerdstore.Vendas.Domain.Entidades
             return PedidoItems.FirstOrDefault(i => i.Id == pedidoItemId);
         }
 
-        private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem)
+        private void AtualizarQuantidadePedidoItemExistente(ref PedidoItem pedidoItem, int quantidade)
         {
             if (ExistePedidoItem(pedidoItem.Id) is PedidoItem pedidoItemExistente)
             {
                 _pedidoItems.Remove(pedidoItemExistente);
-                pedidoItemExistente.AdicionaQuantidade(pedidoItem.Quantidade);
+                pedidoItemExistente.AdicionaQuantidade(quantidade);
                 pedidoItem = pedidoItemExistente;
             }
         }
 
         private void TratarNumeroMaximoItemPedido(PedidoItem pedidoItem)
         {
-            if (pedidoItem.Quantidade > MAX_UNIDADES_ITEM) throw new DomainException($"Maximo de {MAX_UNIDADES_ITEM} unidades por produto");
+            if (ExistePedidoItem(pedidoItem.Id) is PedidoItem pedidoExistente 
+                    && ( pedidoExistente.Quantidade > MAX_UNIDADES_ITEM || pedidoExistente.Quantidade + pedidoItem.Quantidade > MAX_UNIDADES_ITEM)
+                    || pedidoItem.Quantidade > MAX_UNIDADES_ITEM)
+                throw new DomainException($"Maximo de {MAX_UNIDADES_ITEM} unidades por produto");
         }
 
         private void CalcularValorPedido()

@@ -142,7 +142,7 @@ namespace NerdStore.BDD.Tests.Pedido
             //Act
 
             //Assert
-            Assert.True(_pedidoTela.ObterValorQuantidade() == _quantidadeInicial + 1);
+            Assert.Equal(_pedidoTela.ObterValorQuantidade(), _quantidadeInicial + 1);
         }
 
         [Then(@"O valor total do pedido sera a multiplicacao da quantidade de itens pelo valor unitario")]
@@ -163,8 +163,10 @@ namespace NerdStore.BDD.Tests.Pedido
         public void WhenOUsuarioAdicionarAQuantidadeMaximaPermitidaAoCarrinho()
         {
             //Arrange
+            _pedidoTela.ClicarEmAdicionarQuantidadeItens(PedidoEntidade.MAX_UNIDADES_ITEM);
 
             //Act
+            _pedidoTela.ClicarEmComprarAgora();
 
             //Assert
         }
