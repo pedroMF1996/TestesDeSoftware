@@ -41,7 +41,7 @@ O projeto explora uma variedade de recursos e ferramentas, incluindo:
 - **FluentAssertion:** Melhora a legibilidade dos testes.
 - **Skip:** Estratégia de escape para testes específicos.
 - **TDD com Selenium:** Testes de integração com Selenium.
-- **BDD com SpecFlow.xUnit:** Desenvolvimento orientado a comportamento.
+- **BDD com SpecFlow.xUnit:** Desenvolvimento orientado a comportamento com Page Object Model (POM) de Martin Fowler.
 - **AngleSharp:** Testes de interface com AngleSharp.
 - **Selenium e ChromeDriver:** Ferramentas para automação de testes de interface.
 
